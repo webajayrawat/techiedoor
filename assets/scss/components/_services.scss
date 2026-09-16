@@ -1,0 +1,523 @@
+// =========================================================================
+// Services — accordion list + sticky preview stage
+// Markup is rendered by assets/js/components/services.js
+// =========================================================================
+
+.services_section {
+    padding: 12rem 0 14rem;
+}
+
+.services_showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 8rem;
+    align-items: start;
+}
+
+.services_list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid $color-line;
+}
+
+.service_row {
+    position: relative;
+    border-bottom: 1px solid $color-line;
+
+    // Soft tint that sweeps up behind the active / hovered row
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0.8rem 0;
+        border-radius: 2.4rem;
+        background: var(--tint);
+        transform: scaleY(0);
+        transform-origin: 50% 100%;
+        opacity: 0;
+        transition: transform 0.6s $ease-out, opacity 0.4s ease;
+    }
+
+    &.is-active::before {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+
+    &__heading {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        font: inherit;
+    }
+
+    &__trigger {
+        display: grid;
+        grid-template-columns: 5.6rem minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 2rem;
+        width: 100%;
+        padding: 3.2rem 2.4rem;
+        background: none;
+        border: 0;
+        text-align: left;
+        color: inherit;
+        cursor: pointer;
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: -0.2rem;
+            border-radius: 2.4rem;
+        }
+    }
+
+    &__index {
+        font-size: 1.4rem;
+        font-weight: 600;
+        letter-spacing: 0.1rem;
+        color: rgba(53, 75, 96, 0.5);
+        font-variant-numeric: tabular-nums;
+        transition: color 0.4s ease;
+    }
+
+    &__name {
+        display: block;
+        min-width: 0;
+    }
+
+    &__title {
+        display: block;
+        font-size: 4.4rem;
+        font-weight: 500;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        color: $color-heading;
+        transition: transform 0.6s $ease-out, color 0.4s ease;
+    }
+
+    &__summary {
+        display: block;
+        margin-top: 0.6rem;
+        font-size: 1.5rem;
+        color: rgba(60, 75, 98, 0.75);
+    }
+
+    &__arrow {
+        display: grid;
+        place-items: center;
+        width: 5.6rem;
+        height: 5.6rem;
+        border-radius: 50%;
+        border: 1px solid rgba(53, 75, 96, 0.2);
+        color: $color-heading;
+        transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+
+        svg {
+            width: 2.2rem;
+            height: 2.2rem;
+            transition: transform 0.5s $ease-out;
+        }
+    }
+
+    &.is-active &__index {
+        color: var(--accent);
+    }
+
+    &.is-active &__arrow {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+
+        svg {
+            transform: rotate(90deg);
+        }
+    }
+
+    // Smooth height expansion without measuring in JS
+    &__panel {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.6s $ease-out;
+    }
+
+    &.is-active &__panel {
+        grid-template-rows: 1fr;
+    }
+
+    &__panel-inner {
+        min-height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        transition: visibility 0s linear 0.6s;
+    }
+
+    &.is-active &__panel-inner {
+        visibility: visible;
+        transition-delay: 0s;
+    }
+
+    &__body {
+        padding: 0 2.4rem 3.6rem 10rem;
+        opacity: 0;
+        transform: translateY(1.2rem);
+        transition: opacity 0.4s ease, transform 0.6s $ease-out;
+    }
+
+    &.is-active &__body {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0.12s;
+    }
+
+    &__media {
+        display: none;
+        margin: 0 0 2.4rem;
+        aspect-ratio: 16 / 10;
+        border-radius: 1.6rem;
+        overflow: hidden;
+        background: #fff;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    }
+
+    &__desc {
+        font-size: 1.6rem;
+        line-height: 1.7;
+        color: $color-body;
+        max-width: 56rem;
+        margin: 0 0 2.4rem;
+    }
+
+    &__tags {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        padding: 0;
+        margin: 0 0 2.8rem;
+
+        li {
+            font-size: 1.3rem;
+            padding: 0.7rem 1.4rem;
+            border-radius: 3rem;
+            background: #fff;
+            border: 1px solid rgba(53, 75, 96, 0.1);
+            color: $color-heading;
+        }
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $color-ink;
+
+        span {
+            transition: transform 0.3s ease;
+        }
+
+        &:hover {
+            color: $color-ink;
+
+            span {
+                transform: translateX(0.4rem);
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 0.4rem;
+            border-radius: 0.4rem;
+        }
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .service_row:hover {
+        &::before {
+            transform: scaleY(1);
+            opacity: 1;
+        }
+
+        .service_row__title {
+            transform: translateX(1.2rem);
+        }
+
+        .service_row__index {
+            color: var(--accent);
+        }
+    }
+}
+
+// ---- Preview stage (desktop) --------------------------------------------
+
+.services_stage {
+    position: sticky;
+    top: 12rem;
+}
+
+.stage_parallax {
+    perspective: 140rem;
+}
+
+.stage_frame {
+    position: relative;
+    aspect-ratio: 10 / 11;
+    transform-style: preserve-3d;
+}
+
+.stage_slide {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 3.2rem;
+    background: var(--tint);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease 0.5s, visibility 0s linear 0.8s;
+
+    &.is-active {
+        z-index: 2;
+        opacity: 1;
+        visibility: visible;
+        transition: none;
+        animation: stageWipe 0.9s $ease-out both;
+    }
+
+    &__num {
+        position: absolute;
+        top: 2.4rem;
+        left: 3.2rem;
+        font-size: 12rem;
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        color: transparent;
+        -webkit-text-stroke: 1px var(--accent);
+        opacity: 0.45;
+    }
+
+    &__visual {
+        position: absolute;
+        top: 21%;
+        left: 12%;
+        right: 12%;
+        aspect-ratio: 4 / 3;
+        border-radius: 1.6rem;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 3rem 6rem -2.4rem rgba(3, 42, 62, 0.4);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+    }
+
+    &.is-active &__visual img {
+        animation: stageImage 1.2s $ease-out both;
+    }
+
+    &__chips {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    &__caption {
+        position: absolute;
+        left: 3.2rem;
+        right: 3.2rem;
+        bottom: 3.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &__title {
+        font-size: 2.4rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: $color-heading;
+    }
+
+    &__tagline {
+        font-size: 1.5rem;
+        color: $color-body;
+    }
+}
+
+.stage_chip {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.6rem;
+    border-radius: 3rem;
+    background: #fff;
+    box-shadow: 0 1.2rem 3rem -1rem rgba(3, 42, 62, 0.25);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $color-heading;
+    white-space: nowrap;
+
+    &::before {
+        content: "";
+        width: 0.8rem;
+        height: 0.8rem;
+        border-radius: 50%;
+        background: var(--accent);
+    }
+
+    // Uses the individual `scale`/`translate` properties so it never fights
+    // with the cursor parallax, which GSAP applies through `transform`.
+    .is-active & {
+        animation: stageChip 0.7s $ease-out var(--chip-delay, 0.25s) both;
+    }
+
+    &--1 {
+        top: 13%;
+        right: 5%;
+        --chip-delay: 0.25s;
+    }
+
+    &--2 {
+        top: 56%;
+        left: 4%;
+        --chip-delay: 0.35s;
+    }
+
+    &--3 {
+        top: 70%;
+        right: 7%;
+        --chip-delay: 0.45s;
+    }
+}
+
+@keyframes stageWipe {
+    from {
+        clip-path: inset(100% 0 0 0 round 3.2rem);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0 round 3.2rem);
+    }
+}
+
+@keyframes stageImage {
+    from {
+        scale: 1.18;
+    }
+
+    to {
+        scale: 1;
+    }
+}
+
+@keyframes stageChip {
+    from {
+        opacity: 0;
+        scale: 0.6;
+        translate: 0 1.6rem;
+    }
+
+    to {
+        opacity: 1;
+        scale: 1;
+        translate: 0 0;
+    }
+}
+
+// ---- Responsive ----------------------------------------------------------
+
+@media screen and (max-width: $bp-xl - 1) {
+    .services_showcase {
+        gap: 5rem;
+    }
+
+    .service_row__title {
+        font-size: 3.6rem;
+    }
+}
+
+@media screen and (max-width: $bp-lg - 1) {
+    .services_section {
+        padding: 10rem 0;
+    }
+
+    .services_showcase {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .services_stage {
+        display: none;
+    }
+
+    .service_row__media {
+        display: block;
+    }
+
+    .service_row__body {
+        padding-left: 10rem;
+    }
+}
+
+@media screen and (max-width: $bp-sm - 1) {
+    .service_row {
+        &::before {
+            inset: 0.4rem -0.8rem;
+            border-radius: 1.6rem;
+        }
+
+        &__trigger {
+            grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+            gap: 1.2rem;
+            padding: 2.4rem 0;
+        }
+
+        &__title {
+            font-size: 2.8rem;
+        }
+
+        &__summary {
+            font-size: 1.4rem;
+        }
+
+        &__arrow {
+            width: 4.8rem;
+            height: 4.8rem;
+        }
+
+        &__body {
+            padding: 0 0 2.8rem;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .service_row,
+    .service_row::before,
+    .service_row__panel,
+    .service_row__body,
+    .service_row__title {
+        transition: none;
+    }
+
+    .stage_slide.is-active,
+    .stage_slide.is-active .stage_slide__visual img,
+    .stage_slide.is-active .stage_chip {
+        animation: none;
+    }
+}

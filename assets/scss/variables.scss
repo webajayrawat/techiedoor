@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+// Variables
+$font-primary: 'Inter', sans-serif;
+$font-secondary: 'Roboto', sans-serif;
+
+$color-dark: #121212;
+$color-light: #fff;
+$color-accent: #FFC000;
+$color-accent-dark: #F6B100;
+$color-muted: rgba(255, 255, 255, 0.7);
+$color-bg-glass: rgba(0, 0, 0, 0.6);
+$color-footer: #171717;
+$color-border: #FDC500;
+
+$sky-500: #0ea5e9;
+
+$radius-xs: 0.5rem;
+$radius-sm: 1rem;
+$radius-md: 1.2rem;
+$radius-lg: 1.6rem;
+
+$transition-default: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+$font-primary: "Be Vietnam Pro", sans-serif;
+$font-secondary: "Roboto", sans-serif;
+
+// Brand tokens (shared by the section components)
+$color-ink: #032A3E;
+$color-heading: #354B60;
+$color-body: #3C4B62;
+$color-teal: #61969D;
+$color-mint: #67FFAB;
+$color-mint-soft: #84F0B2;
+$color-line: rgba(53, 75, 96, 0.14);
+$font-script: "Borel", cursive;
+$ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+// Breakpoints (match Bootstrap)
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;

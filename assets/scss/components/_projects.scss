@@ -1,0 +1,368 @@
+// =========================================================================
+// Projects — large-format showcase
+// Markup is rendered by assets/js/components/projects.js
+// =========================================================================
+
+.showcase_section {
+    padding: 16rem 0 12rem;
+}
+
+.project_list {
+    display: flex;
+    flex-direction: column;
+    gap: 16rem;
+}
+
+.project_card {
+    position: relative;
+
+    &__media {
+        display: block;
+        position: relative;
+        color: inherit;
+    }
+
+    // Clip-path reveal target (scrubbed by GSAP)
+    &__reveal {
+        position: relative;
+        overflow: hidden;
+        border-radius: 3.2rem;
+        background-color: var(--accent);
+        // Isolates the rounded clip in Safari while children transform
+        isolation: isolate;
+    }
+
+    // Parallax target (scrubbed by GSAP)
+    &__parallax {
+        position: absolute;
+        inset: 0;
+    }
+
+    // Hover target (CSS only, so it never fights the scroll animations)
+    &__img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 1.2s $ease-out;
+    }
+
+    &__badge {
+        position: absolute;
+        top: 2.4rem;
+        left: 2.4rem;
+        z-index: 2;
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 0.1rem;
+        text-transform: uppercase;
+        line-height: 1;
+        padding: 0.9rem 1.4rem;
+        border-radius: 3rem;
+        background: rgba(255, 255, 255, 0.88);
+        color: $color-heading;
+    }
+
+    // ---- Info column --------------------------------------------------------
+
+    &__meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1.2rem 1.6rem;
+        margin-bottom: 2.4rem;
+    }
+
+    &__index {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: $color-heading;
+        font-variant-numeric: tabular-nums;
+
+        span {
+            color: rgba(53, 75, 96, 0.45);
+        }
+    }
+
+    &__category {
+        @extend %label_chip;
+    }
+
+    &__name {
+        font-size: 6.4rem;
+        font-weight: 600;
+        line-height: 1.04;
+        letter-spacing: -0.04em;
+        color: $color-heading;
+        margin: 0 0 2rem;
+    }
+
+    &__desc {
+        font-size: 1.7rem;
+        line-height: 1.7;
+        color: $color-body;
+        max-width: 50rem;
+        margin: 0 0 2.4rem;
+    }
+
+    &__services {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        padding: 0;
+        margin: 0 0 3.2rem;
+
+        li {
+            font-size: 1.3rem;
+            padding: 0.7rem 1.4rem;
+            border-radius: 3rem;
+            border: 1px solid rgba(53, 75, 96, 0.18);
+            color: $color-heading;
+        }
+    }
+
+    &__cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 1rem;
+        height: 5.2rem;
+        padding: 0 2.8rem;
+        border-radius: 18rem;
+        background: $color-ink;
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 500;
+        white-space: nowrap;
+        // Override the global `a { transition: all }`: GSAP animates this
+        // element's opacity/transform on reveal and must not be smoothed by CSS.
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+        span {
+            transition: transform 0.4s $ease-out;
+        }
+
+        &:hover {
+            background: #021c29;
+            color: #fff;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.125);
+
+            span {
+                transform: translateX(0.5rem);
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid $color-ink;
+            outline-offset: 0.3rem;
+        }
+    }
+
+    // ---- Feature: full-width panel ------------------------------------------
+
+    &--feature {
+        .project_card__reveal {
+            aspect-ratio: 16 / 8;
+        }
+
+        .project_card__info {
+            display: grid;
+            grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+            grid-template-areas:
+                "meta desc services"
+                "name desc cta";
+            gap: 0 6rem;
+            align-items: start;
+            margin-top: 4.8rem;
+        }
+
+        .project_card__meta {
+            grid-area: meta;
+        }
+
+        .project_card__name {
+            grid-area: name;
+            margin: 0;
+        }
+
+        .project_card__desc {
+            grid-area: desc;
+            margin: 0;
+        }
+
+        .project_card__services {
+            grid-area: services;
+            margin-bottom: 2.4rem;
+        }
+
+        .project_card__cta {
+            grid-area: cta;
+            justify-self: start;
+        }
+    }
+
+    // ---- Editorial: alternating framed panels -------------------------------
+
+    &--editorial {
+        display: grid;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        gap: 8rem;
+        align-items: center;
+
+        .project_card__reveal {
+            aspect-ratio: 5 / 4;
+            background-image: radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.35), transparent 55%),
+                linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.18));
+        }
+
+        // The screenshot floats inside the coloured panel like a screen
+        .project_card__parallax {
+            inset: 13% 10%;
+        }
+
+        .project_card__img {
+            border-radius: 1.4rem;
+            box-shadow: 0 4rem 8rem -2rem rgba(0, 0, 0, 0.45);
+        }
+    }
+
+    &--reverse {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+
+        .project_card__media {
+            order: 2;
+        }
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .project_card__media:hover .project_card__img {
+        transform: scale(1.04);
+    }
+}
+
+// Cursor-following label (only rendered for projects with a URL)
+.project_cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    width: 10rem;
+    height: 10rem;
+    margin: -5rem 0 0 -5rem;
+    border-radius: 50%;
+    background: $color-mint;
+    color: $color-ink;
+    font-size: 1.4rem;
+    font-weight: 600;
+    pointer-events: none;
+    scale: 0;
+    transition: scale 0.35s $ease-out;
+
+    &.is-visible {
+        scale: 1;
+    }
+}
+
+// ---- Responsive ----------------------------------------------------------
+
+@media screen and (max-width: $bp-xl - 1) {
+    .project_card {
+        &__name {
+            font-size: 5.2rem;
+        }
+
+        &--editorial {
+            gap: 5rem;
+        }
+
+        &--feature .project_card__info {
+            gap: 0 4rem;
+        }
+    }
+}
+
+@media screen and (max-width: $bp-lg - 1) {
+    .showcase_section {
+        padding: 12rem 0 10rem;
+    }
+
+    .project_list {
+        gap: 10rem;
+    }
+
+    .project_card {
+
+        &--editorial,
+        &--reverse {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 4rem;
+
+            .project_card__media {
+                order: 0;
+            }
+        }
+
+        &--feature {
+            .project_card__reveal {
+                aspect-ratio: 4 / 3;
+            }
+
+            .project_card__info {
+                display: block;
+                margin-top: 4rem;
+            }
+
+            .project_card__name,
+            .project_card__desc {
+                margin-bottom: 2.4rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $bp-sm - 1) {
+    .project_list {
+        gap: 8rem;
+    }
+
+    .project_card {
+        &__reveal {
+            border-radius: 2rem;
+        }
+
+        &__badge {
+            top: 1.4rem;
+            left: 1.4rem;
+        }
+
+        &__name {
+            font-size: 4rem;
+        }
+
+        &__desc {
+            font-size: 1.6rem;
+        }
+
+        &--editorial .project_card__reveal {
+            aspect-ratio: 1 / 1;
+        }
+
+        &--editorial .project_card__parallax {
+            inset: 18% 7%;
+        }
+
+        &__cta {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .project_card__img {
+        transition: none;
+    }
+}

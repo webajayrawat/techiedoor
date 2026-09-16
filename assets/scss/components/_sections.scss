@@ -1,0 +1,139 @@
+// =========================================================================
+// Shared section building blocks: wide container, section heading, reveal
+// =========================================================================
+
+.inner_wide {
+    width: 100%;
+    max-width: 144rem;
+    margin: 0 auto;
+    padding-left: 4rem;
+    padding-right: 4rem;
+}
+
+// Anchor targets land below the fixed header.
+section[id] {
+    scroll-margin-top: 8rem;
+}
+
+%label_chip {
+    display: inline-block;
+    color: $color-teal;
+    font-size: 1.2rem;
+    padding: 1rem 1.5rem;
+    background: rgba(110, 127, 153, 0.1);
+    border-radius: 3rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    line-height: 1;
+}
+
+.section_head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 4rem 8rem;
+    margin-bottom: 8rem;
+
+    .sub_text {
+        @extend %label_chip;
+        margin-bottom: 2.4rem;
+    }
+
+    &__main {
+        max-width: 80rem;
+    }
+
+    &__side {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2.4rem;
+        max-width: 44rem;
+    }
+}
+
+.section_title {
+    font-size: 8rem;
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.04em;
+    color: $color-heading;
+    margin: 0;
+}
+
+// Script accent word inside headings (brand font from the "Still here?" band)
+.accent_script {
+    font-family: $font-script;
+    font-weight: 400;
+    font-size: 0.82em;
+    letter-spacing: 0;
+    padding: 0 0.08em;
+    background: linear-gradient(100deg, #1fb985, #2aa2d6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.section_lead {
+    font-size: 1.8rem;
+    line-height: 1.65;
+    color: $color-body;
+    margin: 0;
+    max-width: 46rem;
+}
+
+.section_count {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 1rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12rem;
+    color: $color-teal;
+
+    b {
+        font-size: 5.6rem;
+        font-weight: 600;
+        letter-spacing: -0.04em;
+        color: $color-heading;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+@media screen and (max-width: $bp-lg - 1) {
+    .inner_wide {
+        padding-left: 3.2rem;
+        padding-right: 3.2rem;
+    }
+
+    .section_head {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 5.6rem;
+    }
+
+    .section_title {
+        font-size: 6rem;
+    }
+}
+
+@media screen and (max-width: $bp-md) {
+    .inner_wide {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .section_title {
+        font-size: 4.4rem;
+    }
+
+    .section_lead {
+        font-size: 1.7rem;
+    }
+
+    .section_count b {
+        font-size: 4.4rem;
+    }
+}

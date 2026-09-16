@@ -1,0 +1,1023 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Borel&display=swap');
+
+@import 'variables';
+@import 'utils';
+@import 'responsive';
+
+/* prevent iOS zoom-on-focus layout jumps */
+input,
+textarea,
+select {
+    font-size: 16px;
+}
+
+/* use a stable viewport height (no jumping on keyboard) */
+:root {
+    --vh: 1vh;
+    // Bootstrap sets :root { scroll-behavior: smooth }. That animates the
+    // scroll jumps ScrollTrigger makes while refreshing, which corrupts pin
+    // and trigger positions whenever a refresh happens mid-page. Anchor links
+    // are smooth-scrolled in assets/js/pages/index.js instead.
+    scroll-behavior: auto;
+}
+
+.full-vh,
+.section-vh {
+    min-height: calc(var(--vh) * 100);
+}
+
+// Base Styles
+html {
+    font-size: 10px;
+}
+
+::selection {
+    color: #FFFFFF;
+    background: #22222286;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    // clip prevents sideways scrolling without turning body into a scroll
+    // container (which breaks position: sticky on iOS Safari)
+    overflow-x: clip;
+}
+
+a,
+button {
+    text-decoration: none;
+    transition: $transition-default;
+
+    &:hover {
+        transition: $transition-default;
+    }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button,
+a,
+p,
+span,
+div {
+    font-family: $font-primary;
+    font-style: normal;
+}
+
+header {
+    padding: 2rem 0;
+    transition: 0.6s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    &.shrink {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #FFF;
+        transition: 0.6s ease;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(0.5rem);
+        -webkit-backdrop-filter: blur(0.5rem);
+        z-index: 99;
+
+    }
+
+    img.logo {
+        height: 2rem;
+    }
+
+    nav {
+        display: flex;
+        gap: 3rem;
+
+        @media screen and (max-width: 1199px) {
+            gap: 2rem;
+        }
+
+        .nav_link {
+            font-size: 1.4rem;
+            color: #222;
+        }
+    }
+}
+
+
+.banner {
+    background: url('../images/background/banner.webp');
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFF;
+    border-radius: 3rem;
+    box-shadow: 0 45px 45px 0 rgba(49, 89, 118, .22);
+    padding: 7% 0;
+    flex-direction: column;
+    text-align: center;
+    height: 70rem;
+    margin-top: 8rem;
+    transition: 0.5s ease;
+
+    &.shrink {
+        margin-top: 0rem;
+        transition: 0.5s ease;
+    }
+
+    .heading {
+        font-size: 8.6rem;
+        font-weight: 500;
+        line-height: 8.5rem;
+        margin-bottom: 0;
+        position: relative;
+    }
+
+    .outline_sketch {
+        position: absolute;
+        top: 7.5rem;
+        right: -1.3rem;
+        width: 31rem;
+        height: auto;
+        transform: rotate(1deg);
+
+        path {
+            stroke: #67ffab;
+        }
+    }
+
+    .pen_icon {
+        position: absolute;
+        right: -3.2rem;
+        top: 7rem;
+        width: 2rem;
+        height: auto;
+        transform: translateX(-21rem);
+        animation: drawPencil 0.35s linear forwards;
+
+        path {
+            fill: #FFF;
+        }
+    }
+
+    .outline_sketch path {
+        stroke-dasharray: 60;
+        /* length of path */
+        stroke-dashoffset: 60;
+        /* start hidden */
+        animation: drawPath 0.4s linear forwards;
+    }
+
+    @keyframes drawPencil {
+        to {
+            transform: translateX(0);
+            /* fully visible */
+        }
+    }
+
+    @keyframes drawPath {
+        to {
+            stroke-dashoffset: 0;
+            /* fully visible */
+        }
+    }
+
+    .text {
+        color: rgba(255, 255, 255, .6);
+        font-size: 20px;
+        margin: 2rem 0 4rem;
+    }
+
+    .icon_2 {
+        left: 24rem;
+        bottom: 0;
+        margin: auto;
+    }
+
+    .icon_3 {
+        left: auto;
+        right: 24rem;
+        top: 16rem;
+    }
+
+    .icon_1 {
+        bottom: 1rem;
+        top: auto;
+        left: auto;
+        right: 24rem;
+    }
+}
+
+.about_section {
+    text-align: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // Keep the glass card above the floating thumbnails in every browser
+    // (it previously relied on backdrop-filter creating a stacking context).
+    .inner {
+        position: relative;
+        z-index: 2;
+    }
+
+
+    .--content {
+        border-radius: 1.6rem;
+        padding: 10rem;
+        background: rgba(110, 127, 153, .1);
+        box-shadow: 0 14px 55px 0 rgba(208, 202, 239, .3);
+        backdrop-filter: blur(0.7rem);
+        -webkit-backdrop-filter: blur(0.7rem);
+        border: 1px solid rgba(255, 255, 255, 0.19);
+
+        .heading {
+            font-size: 4rem;
+            color: #354B60;
+            font-weight: 500;
+            margin: 3rem 0 3rem;
+
+            b {
+                font-weight: 500;
+                display: block;
+                margin-top: 0.5rem;
+            }
+        }
+
+
+        .text {
+            color: #3C4B62;
+            font-size: 1.6rem;
+            width: 70%;
+            margin: 0 auto 5rem;
+        }
+
+        .sub_text {
+            color: #61969D;
+            font-size: 1.2rem;
+            padding: 1rem 1.5rem;
+            background: rgba(110, 127, 153, 0.1);
+            width: fit-content;
+            border-radius: 3rem;
+            text-transform: uppercase;
+            margin: 0 auto;
+            font-weight: 600;
+            letter-spacing: 0.1rem;
+        }
+
+
+    }
+
+
+
+    #project1,
+    #project3 {
+        width: 30rem;
+        left: auto;
+        right: 0;
+    }
+
+    #project2,
+    #project4 {
+        width: 30rem;
+    }
+
+    #project1 {
+        top: 120rem;
+        right: 20rem;
+    }
+
+    #project3 {
+        top: 70rem;
+        right: 10rem;
+    }
+
+    #project2 {
+        top: 140rem;
+        left: 10rem;
+    }
+
+    #project4 {
+        top: 90rem;
+        left: 10rem;
+    }
+
+    .project_img {
+        z-index: 1;
+        height: auto;
+        border-radius: 1.6rem;
+        pointer-events: none;
+        will-change: transform;
+    }
+
+
+    .btn {
+        margin: auto;
+    }
+}
+
+.projects_section {
+    padding: 10rem 0 10rem;
+
+    .swiper {
+        cursor: grab;
+    }
+
+    .heading {
+        font-size: 5rem;
+        font-weight: 700;
+        margin: 1rem 0 3rem;
+        letter-spacing: -0.1rem;
+        color: #354b60;
+    }
+
+    .--item {
+        border-radius: 3.2rem;
+        overflow: hidden;
+        position: relative;
+        transition: 0.5s ease;
+        cursor: pointer;
+
+
+
+        .play_icon {
+            position: absolute;
+            left: 0;
+            top: 100%;
+            right: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff00;
+            backdrop-filter: blur(0.4rem);
+            transition: 0.5s ease;
+
+            img {
+                width: 6rem;
+                z-index: 1;
+                filter: drop-shadow(0 0 1rem 0 #000);
+            }
+        }
+
+        &:hover {
+            transition: 0.5s ease;
+
+            .play_icon {
+                top: 0;
+            }
+
+        }
+    }
+
+}
+
+.tempass_section {
+    text-align: end;
+    overflow: hidden;
+    margin-bottom: 0;
+
+    .heading {
+        font-size: 10rem;
+        font-weight: 500;
+        font-style: italic;
+        white-space: nowrap;
+        position: relative;
+        transform: translateX(210rem);
+        font-family: "Borel", cursive;
+        font-weight: 400;
+        color: rgb(223, 196, 255);
+        line-height: 21rem;
+    }
+}
+
+.contact_section {
+    padding: 7rem 0 10rem;
+
+    .contact_form {
+        background: rgba(110, 127, 153, 0.1);
+        box-shadow: 0 14px 55px 0 rgba(208, 202, 239, .3);
+        padding: 5rem 2.4rem 6rem;
+        border-radius: 1.6rem;
+        text-align: center;
+        position: relative;
+
+        .sub_text {
+            color: #61969D;
+            font-size: 1.2rem;
+            padding: 1rem 1.5rem;
+            background: rgba(110, 127, 153, 0.1);
+            width: fit-content;
+            border-radius: 3rem;
+            text-transform: uppercase;
+            margin: 0 auto;
+            font-weight: 600;
+            letter-spacing: 0.1rem;
+        }
+
+        .heading {
+            font-size: 3.6rem;
+            font-weight: 700;
+            margin: 2rem 0 3rem;
+            letter-spacing: -0.1rem;
+        }
+
+        .icon_bottom {
+            width: 15em;
+            top: auto;
+            left: auto;
+            bottom: 0;
+            right: 14rem;
+            z-index: 1;
+            animation: floatSecond 3s ease-in-out infinite;
+        }
+
+        .icon_top {
+            width: 13em;
+            top: 10rem;
+            left: 14rem;
+            z-index: 1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .icon_bg {
+            width: 45em;
+            left: auto;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+
+        form {
+            box-shadow: 0 30px 70px 0 rgba(27, 32, 75, .07);
+            width: 60rem;
+            padding: 5.5rem;
+            margin: 0 auto;
+            position: relative;
+            background: #FFF;
+            border-radius: 1rem;
+
+
+            .form_group {
+                margin-bottom: 3.6rem;
+
+
+                .virtual_select .vscomp-value[data-tooltip=Select],
+                .vscomp-search-input {
+                    color: #999999 !important;
+                    font-weight: 400 !important;
+                    font-family: $font-primary;
+                    font-size: 1.4rem;
+                    font-style: normal;
+                    line-height: 2rem;
+                    text-align: left;
+                }
+
+                .virtual_select .vscomp-toggle-button {
+                    border: 0;
+                    border-bottom: 0.1rem solid var(--Gray-300, #B3B9C6);
+                    border-radius: 0;
+                    padding-left: 0;
+
+
+                    &:hover {
+                        box-shadow: none;
+                    }
+                }
+            }
+
+            .form_control {
+                width: 100%;
+                height: 5.2rem;
+                background: #FFF;
+                border-radius: 0;
+                border: 0rem solid var(--Gray-300, #B3B9C6);
+                border-bottom: 0.1rem solid var(--Gray-300, #B3B9C6);
+                padding: 0 0rem;
+                color: #000;
+                font-family: $font-primary;
+                font-size: 1.4rem;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 2rem;
+
+                &:focus,
+                &:hover,
+                &:focus-visible {
+                    border: 0rem solid var(--Gray-300, #B3B9C6);
+                    border-bottom: 0.1rem solid var(--Gray-300, #B3B9C6);
+                    box-shadow: none;
+                    outline: none;
+                }
+
+                color: #000;
+
+                &::placeholder {
+                    color: #999999;
+                }
+
+                &.--search {
+                    padding-left: 0.8rem + 2.4rem + 1.6rem;
+                    background: url(https://assets.xapads.com/images/icons/search.svg) no-repeat;
+                    background-size: 2.4rem;
+                    background-position: 1.6rem center;
+                }
+            }
+
+            .error_message {
+                display: none;
+                color: #F00;
+                font-family: "Inter", sans-serif;
+                font-size: 1.4rem;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 3rem;
+                text-align: left;
+
+                &.is-visible {
+                    display: block;
+                    line-height: 1.5;
+                    padding-top: 0.8rem;
+                }
+            }
+
+            // Invalid state (set by assets/js/components/contact-form.js)
+            .form_control.is-invalid,
+            .form_control.is-invalid:hover,
+            .form_control.is-invalid:focus,
+            .form_control.is-invalid:focus-visible {
+                border-bottom-color: #F00;
+            }
+
+            .virtual_select.is-invalid .vscomp-toggle-button {
+                border-bottom-color: #F00;
+            }
+
+            .btn_form {
+                gap: 1rem;
+
+                &:disabled {
+                    opacity: 0.7;
+                    cursor: progress;
+                }
+
+                .spinner-border {
+                    width: 1.6rem;
+                    height: 1.6rem;
+                    border-width: 0.2rem;
+                }
+            }
+
+            .form_status {
+                margin: 2rem 0 0;
+                font-size: 1.4rem;
+                line-height: 1.6;
+                text-align: left;
+                color: #3C4B62;
+
+                &:empty {
+                    display: none;
+                }
+
+                &--error {
+                    color: #F00;
+                }
+
+                &--success {
+                    color: #1a7f4e;
+                }
+
+                &--info {
+                    padding: 1.2rem 1.6rem;
+                    border-radius: 1rem;
+                    background: rgba(110, 127, 153, 0.1);
+                }
+
+                a {
+                    color: #032A3E;
+                    font-weight: 600;
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .btn_primary {
+            margin-top: 4.8rem;
+        }
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translatey(0px);
+    }
+
+    50% {
+        transform: translatey(-20px);
+    }
+
+    100% {
+        transform: translatey(0px);
+    }
+}
+
+@keyframes floatSecond {
+    0% {
+        transform: translatey(0px);
+    }
+
+    50% {
+        transform: translatey(-6rem);
+    }
+
+    100% {
+        transform: translatey(0px);
+    }
+}
+
+
+.icon_1,
+.icon_2,
+.icon_3 {
+    width: 15rem;
+}
+
+.item_card {
+    box-shadow: 0 14px 55px 0 rgba(208, 202, 239, .3);
+    border-radius: 1.6rem;
+    padding: 4dvh 5.5rem;
+    position: relative;
+
+    .heading {
+        font-size: 5rem;
+        color: #354B60;
+        font-weight: 700;
+    }
+
+    .text {
+        position: absolute;
+        width: 50%;
+        bottom: 2rem;
+        left: 5.5rem;
+        color: #3C4B62;
+        font-size: 1.4rem;
+    }
+
+
+
+    .swiper_slider {
+        height: 29rem;
+
+        .swiper-slide {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+
+            .title {
+                font-size: 5rem;
+                font-weight: 700;
+                color: #c3c4ca;
+            }
+
+            &.swiper-slide-active {
+                .title {
+                    background: -webkit-linear-gradient(#62f562, #34e7ff);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    transition: 0.5s ease;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+.footer {
+    padding: 10rem 0 0;
+
+    // Bootstrap .row uses negative margins; without side padding they caused
+    // horizontal scrolling between 769px and 1199px.
+    >.inner {
+        @media screen and (max-width: 1199px) {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+    }
+
+    .text {
+        font-size: 1.4rem;
+        color: rgba(0, 0, 0, .6);
+        width: 60%;
+    }
+
+    .social_links {
+        padding: 0.5rem 0;
+        display: flex;
+        list-style: none;
+        gap: 1rem;
+        align-items: center;
+        margin: 0;
+        color: #000;
+
+        .--link {
+            display: flex;
+            gap: 0.4rem;
+            color: #111111;
+
+
+            svg {
+                width: 2.6rem;
+                height: 2.6rem;
+
+                path {
+                    fill: #111111;
+                }
+            }
+        }
+    }
+
+    .footer_bottom {
+        border-top: 0.1rem solid rgba(0, 0, 0, .1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 3rem 0 5rem;
+        margin-top: 5rem;
+
+        .copyright {
+            color: rgba(0, 0, 0, .5);
+            font-size: 1rem;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .fb_link {
+            color: rgba(0, 0, 0, .5);
+            font-size: 1rem;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .f_content {
+            margin: 0;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+    }
+
+    .logo {
+        width: 20rem;
+    }
+
+    .heading {
+        color: rgba(0, 0, 0, .5);
+        font-size: 1rem;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 0.1rem;
+    }
+
+    .f_content {
+        margin: 3rem 0 0;
+    }
+
+    .f_link {
+        font-size: 1.8rem;
+        color: #111111;
+    }
+
+    .list_style {
+        padding: 0;
+        list-style: none;
+    }
+}
+
+
+
+
+.modal.show {
+    transform: none;
+    backdrop-filter: blur(1rem);
+
+    .btn-close {
+        position: absolute;
+        top: -3.5rem;
+        font-size: 2rem;
+        right: 0;
+        /* filter: contrast(5.5); */
+    }
+
+}
+
+@media screen and (min-width: 1600px) {
+
+    html {
+        font-size: 10px !important
+    }
+
+}
+
+@media screen and (max-width:2000px) {
+    html {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width:1600px) {
+    html {
+        font-size: 8px;
+    }
+}
+
+@media screen and (max-width:1024px) {
+    .about_section .project_img {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about_section .project_img {
+        display: none;
+    }
+}
+
+@media screen and (max-width:980px) {
+    .banner .icon_3 {
+        right: 2rem;
+    }
+
+    .banner .icon_2 {
+        left: 2rem;
+    }
+
+    .tempass_section .heading {
+        font-size: 8rem;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .tempass_section {
+        display: none;
+    }
+
+    .px_20 {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    header {
+        nav {
+            display: none;
+        }
+    }
+
+    .contact_section {
+        .contact_form {
+            form {
+                width: 100%;
+
+            }
+
+            .icon_bottom {
+                bottom: -13rem;
+                right: 2rem;
+            }
+
+            .icon_top {
+                width: 10em;
+                top: -6rem;
+                left: 0rem;
+            }
+        }
+
+    }
+
+
+
+    .banner {
+
+        .icon_1,
+        .icon_2,
+        .icon_3 {
+            width: 10rem;
+        }
+
+        .icon_1 {
+            left: -1rem;
+        }
+
+        .icon_2 {
+            left: -1rem;
+        }
+
+        .icon_3 {
+            right: -1rem;
+        }
+
+        .pen_icon {
+            top: 3rem;
+        }
+
+        .outline_sketch {
+            width: 15rem;
+            top: 4rem;
+        }
+
+    }
+
+    .flex_xs_column_reverse {
+        flex-direction: column-reverse;
+    }
+
+    footer.footer .--content {
+        margin: 5rem 0 0;
+    }
+
+    .item_card {
+        padding: 5rem;
+
+        .swiper_slider {
+            width: 100%;
+        }
+
+        .text {
+            position: relative;
+            border: 0;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            font-size: 1.6rem;
+            margin: 1rem 0 2rem;
+        }
+    }
+
+
+
+    .about_section {
+        .--content {
+            padding: 5rem 2rem;
+
+            .heading {
+                font-size: 3rem;
+
+                b {
+                    font-size: 2.8rem;
+                }
+            }
+
+            .text {
+                width: 100%;
+            }
+        }
+    }
+
+
+    .footer .text {
+        width: 100%;
+        margin-bottom: 4rem;
+    }
+
+    .flex_xs_column {
+        flex-direction: column;
+    }
+
+    main {
+        .banner {
+            height: 40rem;
+            line-height: 6rem;
+
+            .heading {
+                font-size: 4rem;
+                line-height: 5rem;
+            }
+
+            .text {
+                font-size: 1.8rem;
+                line-height: 2.4rem;
+                padding: 0 10rem;
+            }
+        }
+    }
+}
+
+// Section components
+@import 'components/sections';
+@import 'components/services';
+@import 'components/projects';
+@import 'components/process';
+@import 'components/footer-tools';
