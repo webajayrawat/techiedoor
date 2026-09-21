@@ -20,7 +20,7 @@ section[id] {
     color: $color-teal;
     font-size: 1.2rem;
     padding: 1rem 1.5rem;
-    background: rgba(110, 127, 153, 0.1);
+    background: var(--td-panel);
     border-radius: 3rem;
     text-transform: uppercase;
     font-weight: 600;

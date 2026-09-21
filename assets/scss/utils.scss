@@ -83,8 +83,8 @@
      }
 
      &.btn_dark {
-         background: #032A3E;
-         color: #FFFFFF;
+         background: var(--td-btn-solid-bg);
+         color: var(--td-btn-solid-text);
          position: relative;
          overflow: hidden;
          transition: 0.5s ease;
@@ -94,7 +94,7 @@
          }
 
          &:hover {
-             background: #021c29;
+             background: var(--td-btn-solid-bg-hover);
              box-shadow: 0 10px 35px rgba(0, 0, 0, .125);
              transition: 0.5s ease;
 

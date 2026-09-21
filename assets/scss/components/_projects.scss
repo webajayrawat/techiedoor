@@ -59,8 +59,8 @@
         line-height: 1;
         padding: 0.9rem 1.4rem;
         border-radius: 3rem;
-        background: rgba(255, 255, 255, 0.88);
-        color: $color-heading;
+        background: var(--td-badge-bg);
+        color: var(--td-badge-text);
     }
 
     // ---- Info column --------------------------------------------------------
@@ -80,7 +80,7 @@
         font-variant-numeric: tabular-nums;
 
         span {
-            color: rgba(53, 75, 96, 0.45);
+            color: var(--td-index-soft);
         }
     }
 
@@ -117,7 +117,7 @@
             font-size: 1.3rem;
             padding: 0.7rem 1.4rem;
             border-radius: 3rem;
-            border: 1px solid rgba(53, 75, 96, 0.18);
+            border: 1px solid var(--td-border-soft);
             color: $color-heading;
         }
     }
@@ -129,8 +129,8 @@
         height: 5.2rem;
         padding: 0 2.8rem;
         border-radius: 18rem;
-        background: $color-ink;
-        color: #fff;
+        background: var(--td-btn-solid-bg);
+        color: var(--td-btn-solid-text);
         font-size: 1.5rem;
         font-weight: 500;
         white-space: nowrap;
@@ -143,8 +143,8 @@
         }
 
         &:hover {
-            background: #021c29;
-            color: #fff;
+            background: var(--td-btn-solid-bg-hover);
+            color: var(--td-btn-solid-text);
             box-shadow: 0 10px 35px rgba(0, 0, 0, 0.125);
 
             span {
@@ -153,7 +153,7 @@
         }
 
         &:focus-visible {
-            outline: 2px solid $color-ink;
+            outline: 2px solid var(--td-focus);
             outline-offset: 0.3rem;
         }
     }

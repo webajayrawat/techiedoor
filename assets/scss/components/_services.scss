@@ -74,7 +74,7 @@
         font-size: 1.4rem;
         font-weight: 600;
         letter-spacing: 0.1rem;
-        color: rgba(53, 75, 96, 0.5);
+        color: var(--td-index);
         font-variant-numeric: tabular-nums;
         transition: color 0.4s ease;
     }
@@ -98,7 +98,7 @@
         display: block;
         margin-top: 0.6rem;
         font-size: 1.5rem;
-        color: rgba(60, 75, 98, 0.75);
+        color: var(--td-summary);
     }
 
     &__arrow {
@@ -107,7 +107,7 @@
         width: 5.6rem;
         height: 5.6rem;
         border-radius: 50%;
-        border: 1px solid rgba(53, 75, 96, 0.2);
+        border: 1px solid var(--td-border);
         color: $color-heading;
         transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
 
@@ -176,7 +176,7 @@
         aspect-ratio: 16 / 10;
         border-radius: 1.6rem;
         overflow: hidden;
-        background: #fff;
+        background: var(--td-surface);
 
         img {
             width: 100%;
@@ -206,8 +206,8 @@
             font-size: 1.3rem;
             padding: 0.7rem 1.4rem;
             border-radius: 3rem;
-            background: #fff;
-            border: 1px solid rgba(53, 75, 96, 0.1);
+            background: var(--td-surface);
+            border: 1px solid var(--td-border-faint);
             color: $color-heading;
         }
     }
@@ -218,14 +218,14 @@
         gap: 0.8rem;
         font-size: 1.5rem;
         font-weight: 600;
-        color: $color-ink;
+        color: var(--td-text-strong);
 
         span {
             transition: transform 0.3s ease;
         }
 
         &:hover {
-            color: $color-ink;
+            color: var(--td-text-strong);
 
             span {
                 transform: translateX(0.4rem);
@@ -314,7 +314,7 @@
         aspect-ratio: 4 / 3;
         border-radius: 1.6rem;
         overflow: hidden;
-        background: #fff;
+        background: var(--td-surface);
         box-shadow: 0 3rem 6rem -2.4rem rgba(3, 42, 62, 0.4);
 
         img {
@@ -365,8 +365,8 @@
     gap: 0.8rem;
     padding: 1rem 1.6rem;
     border-radius: 3rem;
-    background: #fff;
-    box-shadow: 0 1.2rem 3rem -1rem rgba(3, 42, 62, 0.25);
+    background: var(--td-surface);
+    box-shadow: 0 1.2rem 3rem -1rem var(--td-chip-shadow);
     font-size: 1.3rem;
     font-weight: 600;
     color: $color-heading;
@@ -436,6 +436,22 @@
         opacity: 1;
         scale: 1;
         translate: 0 0;
+    }
+}
+
+// ---- Dark theme -----------------------------------------------------------
+// The pastel --tint values (site-data.js, set inline) glare on a dark page,
+// so derive a deep tint from each service's accent instead. The plain
+// surface colour is the fallback where color-mix() is unsupported.
+[data-theme="dark"] {
+    .service_row::before {
+        background: var(--td-surface);
+        background: color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    .stage_slide {
+        background: var(--td-surface);
+        background: color-mix(in srgb, var(--accent) 18%, var(--td-surface));
     }
 }
 

@@ -1,0 +1,246 @@
+// =========================================================================
+// Theme tokens (light / dark)
+//
+// Every themeable colour is a CSS custom property. Light values are the
+// site's original colours, so light mode renders exactly as before; dark
+// mode only redefines the tokens under html[data-theme="dark"].
+//
+// The attribute is set by assets/js/components/theme.js, which runs in
+// <head> before first paint (no flash of the wrong theme).
+//
+// Adding a colour: create a --td-* token in both blocks and use var() in the
+// component. Brand accents that read well on both themes (mint, lilac,
+// per-service accents from site-data.js) stay as plain SCSS/inline values.
+// =========================================================================
+
+:root {
+    color-scheme: light;
+
+    // Page
+    --td-bg: #fff;
+    --td-heading: #{$color-heading-light};
+    --td-body: #{$color-body-light};
+    --td-teal: #{$color-teal-light};
+    --td-line: #{$color-line-light};
+    --td-text-strong: #{$color-ink};
+    --td-focus: #{$color-ink};
+
+    // Surfaces
+    --td-surface: #fff; // cards, form, chips
+    --td-panel: rgba(110, 127, 153, 0.1); // tinted containers + label chips
+    --td-panel-shadow: rgba(208, 202, 239, 0.3);
+    --td-card-shadow: rgba(27, 32, 75, 0.07);
+
+    // Header
+    --td-header-glass: rgba(255, 255, 255, 0.18);
+    --td-header-shadow: rgba(0, 0, 0, 0.1);
+    --td-nav: #222;
+
+    // Solid "dark" button (Contact Us, project CTA, reached process pin)
+    --td-btn-solid-bg: #{$color-ink};
+    --td-btn-solid-bg-hover: #021c29;
+    --td-btn-solid-text: #fff;
+
+    // Theme toggle
+    --td-toggle-bg: #fff;
+    --td-toggle-border: rgba(3, 42, 62, 0.14);
+    --td-toggle-icon: #{$color-ink};
+
+    // Muted text / borders (kept separate to preserve the original values)
+    --td-index: rgba(53, 75, 96, 0.5);
+    --td-index-soft: rgba(53, 75, 96, 0.45);
+    --td-summary: rgba(60, 75, 98, 0.75);
+    --td-border: rgba(53, 75, 96, 0.2);
+    --td-border-soft: rgba(53, 75, 96, 0.18);
+    --td-border-faint: rgba(53, 75, 96, 0.1);
+    --td-slider-idle: #c3c4ca;
+
+    // Forms
+    --td-input-bg: #fff;
+    --td-input-text: #000;
+    --td-input-border: #B3B9C6;
+    --td-placeholder: #999999;
+    --td-success: #1a7f4e;
+    --td-error: #F00;
+
+    // Projects
+    --td-badge-bg: rgba(255, 255, 255, 0.88);
+    --td-badge-text: #{$color-heading-light};
+
+    // Process
+    --td-pen: #516e65;
+    --td-route-plan: rgba(81, 110, 101, 0.3);
+
+    // Footer
+    --td-footer-text: rgba(0, 0, 0, 0.6);
+    --td-footer-muted: rgba(0, 0, 0, 0.5);
+    --td-footer-hint: rgba(0, 0, 0, 0.55);
+    --td-footer-strong: #111111;
+    --td-footer-line: rgba(0, 0, 0, 0.1);
+    --td-tools-border: rgba(110, 127, 153, 0.14);
+    --td-tools-word: rgba(53, 75, 96, 0.07);
+    --td-tools-btn-border: rgba(3, 42, 62, 0.18);
+    --td-chip-border: rgba(3, 42, 62, 0.08);
+    --td-chip-shadow: rgba(3, 42, 62, 0.25);
+
+    // Banner
+    --td-banner-shadow: rgba(49, 89, 118, 0.22);
+}
+
+// Dark palette: deep navy-teal derived from the brand ink (#032A3E)
+[data-theme="dark"] {
+    color-scheme: dark;
+
+    --td-bg: #0A161D;
+    --td-heading: #E7EEF3;
+    --td-body: #A9B8C4;
+    --td-teal: #7CC2C9;
+    --td-line: rgba(231, 238, 243, 0.12);
+    --td-text-strong: #E7EEF3;
+    --td-focus: #{$color-mint};
+
+    --td-surface: #12252F;
+    --td-panel: rgba(255, 255, 255, 0.04);
+    --td-panel-shadow: rgba(0, 0, 0, 0.35);
+    --td-card-shadow: rgba(0, 0, 0, 0.35);
+
+    --td-header-glass: rgba(10, 22, 29, 0.72);
+    --td-header-shadow: rgba(0, 0, 0, 0.4);
+    --td-nav: rgba(231, 238, 243, 0.85);
+
+    --td-btn-solid-bg: #E7EEF3;
+    --td-btn-solid-bg-hover: #fff;
+    --td-btn-solid-text: #{$color-ink};
+
+    --td-toggle-bg: #12252F;
+    --td-toggle-border: rgba(231, 238, 243, 0.16);
+    --td-toggle-icon: #FFD66B;
+
+    --td-index: rgba(231, 238, 243, 0.4);
+    --td-index-soft: rgba(231, 238, 243, 0.4);
+    --td-summary: rgba(169, 184, 196, 0.85);
+    --td-border: rgba(231, 238, 243, 0.2);
+    --td-border-soft: rgba(231, 238, 243, 0.16);
+    --td-border-faint: rgba(231, 238, 243, 0.1);
+    --td-slider-idle: rgba(231, 238, 243, 0.22);
+
+    --td-input-bg: transparent;
+    --td-input-text: #E7EEF3;
+    --td-input-border: rgba(231, 238, 243, 0.22);
+    --td-placeholder: #7D8C98;
+    --td-success: #{$color-mint-soft};
+    --td-error: #FF7A7A;
+
+    --td-badge-bg: rgba(10, 22, 29, 0.78);
+    --td-badge-text: #E7EEF3;
+
+    --td-pen: #8CC5B4;
+    --td-route-plan: rgba(140, 197, 180, 0.35);
+
+    --td-footer-text: rgba(231, 238, 243, 0.65);
+    --td-footer-muted: rgba(231, 238, 243, 0.5);
+    --td-footer-hint: rgba(231, 238, 243, 0.55);
+    --td-footer-strong: #E7EEF3;
+    --td-footer-line: rgba(231, 238, 243, 0.1);
+    --td-tools-border: rgba(231, 238, 243, 0.08);
+    --td-tools-word: rgba(231, 238, 243, 0.05);
+    --td-tools-btn-border: rgba(231, 238, 243, 0.18);
+    --td-chip-border: rgba(231, 238, 243, 0.08);
+    --td-chip-shadow: rgba(0, 0, 0, 0.5);
+
+    --td-banner-shadow: rgba(0, 0, 0, 0.45);
+
+    // Bootstrap 5.2 reads these for <body> and its components
+    --bs-body-bg: var(--td-bg);
+    --bs-body-color: var(--td-heading);
+    --bs-border-color: var(--td-line);
+}
+
+// ---- Theme-dependent assets ---------------------------------------------
+// Pair a light and dark version of an image: <img class="theme_light"> +
+// <img class="theme_dark" loading="lazy"> (the hidden one is never fetched).
+.theme_dark {
+    display: none !important;
+}
+
+[data-theme="dark"] {
+    .theme_light {
+        display: none !important;
+    }
+
+    .theme_dark {
+        display: revert !important;
+    }
+}
+
+// ---- Toggle transition --------------------------------------------------
+// theme.js swaps the theme inside document.startViewTransition(), so the
+// whole page cross-fades once instead of transitioning every element's
+// colours (which would fight the existing CSS/GSAP animations).
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.35s;
+    animation-timing-function: ease;
+}
+
+// ---- Theme toggle button (header) ---------------------------------------
+.theme_toggle {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 4rem; // matches .btn_sm height
+    height: 4rem;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--td-toggle-border);
+    background: var(--td-toggle-bg);
+    color: var(--td-toggle-icon);
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover {
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.125);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--td-focus);
+        outline-offset: 0.2rem;
+    }
+
+    &__icon {
+        grid-area: 1 / 1;
+        width: 1.8rem;
+        height: 1.8rem;
+        transition: transform 0.5s $ease-out, opacity 0.3s ease;
+    }
+
+    // Light theme shows the moon ("switch to night"), dark shows the sun
+    &__icon--sun {
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.5);
+    }
+
+    [data-theme="dark"] & {
+        &__icon--moon {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
+        }
+
+        &__icon--sun {
+            opacity: 1;
+            transform: none;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme_toggle__icon {
+        transition: none;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation: none;
+    }
+}

@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Borel&display=swap');
 
 @import 'variables';
+@import 'theme';
 @import 'utils';
 @import 'responsive';
 
@@ -86,8 +87,8 @@ header {
         width: 100%;
         background: #FFF;
         transition: 0.6s ease;
-        background: rgba(255, 255, 255, 0.18);
-        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        background: var(--td-header-glass);
+        box-shadow: 0 4px 30px var(--td-header-shadow);
         backdrop-filter: blur(0.5rem);
         -webkit-backdrop-filter: blur(0.5rem);
         z-index: 99;
@@ -96,6 +97,17 @@ header {
 
     img.logo {
         height: 2rem;
+    }
+
+    // Contact button + theme toggle
+    .header_actions {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+
+        .btn {
+            white-space: nowrap;
+        }
     }
 
     nav {
@@ -108,7 +120,43 @@ header {
 
         .nav_link {
             font-size: 1.4rem;
-            color: #222;
+            color: var(--td-nav);
+        }
+    }
+
+    // Small tablets, where the nav is still shown: tighten the spacing so the
+    // theme toggle fits without wrapping the nav labels onto two lines.
+    @media screen and (min-width: 769px) and (max-width: 859px) {
+        nav {
+            gap: 1.2rem;
+        }
+
+        .gap_26 {
+            gap: 1.6rem;
+        }
+
+        .header_actions {
+            gap: 0.8rem;
+        }
+    }
+
+    // Very narrow phones (e.g. 280px foldables): let the logo scale down
+    // instead of squeezing the Contact button onto two lines.
+    @media screen and (max-width: 359px) {
+        img.logo {
+            min-width: 0;
+            flex: 0 1 auto;
+            object-fit: contain;
+            object-position: left center;
+            margin-right: 1.2rem;
+        }
+
+        .header_actions {
+            gap: 0.8rem;
+
+            .btn_sm {
+                padding: 0 1.6rem;
+            }
         }
     }
 }
@@ -122,7 +170,7 @@ header {
     justify-content: center;
     color: #FFF;
     border-radius: 3rem;
-    box-shadow: 0 45px 45px 0 rgba(49, 89, 118, .22);
+    box-shadow: 0 45px 45px 0 var(--td-banner-shadow);
     padding: 7% 0;
     flex-direction: column;
     text-align: center;
@@ -236,15 +284,15 @@ header {
     .--content {
         border-radius: 1.6rem;
         padding: 10rem;
-        background: rgba(110, 127, 153, .1);
-        box-shadow: 0 14px 55px 0 rgba(208, 202, 239, .3);
+        background: var(--td-panel);
+        box-shadow: 0 14px 55px 0 var(--td-panel-shadow);
         backdrop-filter: blur(0.7rem);
         -webkit-backdrop-filter: blur(0.7rem);
         border: 1px solid rgba(255, 255, 255, 0.19);
 
         .heading {
             font-size: 4rem;
-            color: #354B60;
+            color: $color-heading;
             font-weight: 500;
             margin: 3rem 0 3rem;
 
@@ -257,17 +305,17 @@ header {
 
 
         .text {
-            color: #3C4B62;
+            color: $color-body;
             font-size: 1.6rem;
             width: 70%;
             margin: 0 auto 5rem;
         }
 
         .sub_text {
-            color: #61969D;
+            color: $color-teal;
             font-size: 1.2rem;
             padding: 1rem 1.5rem;
-            background: rgba(110, 127, 153, 0.1);
+            background: var(--td-panel);
             width: fit-content;
             border-radius: 3rem;
             text-transform: uppercase;
@@ -339,7 +387,7 @@ header {
         font-weight: 700;
         margin: 1rem 0 3rem;
         letter-spacing: -0.1rem;
-        color: #354b60;
+        color: $color-heading;
     }
 
     .--item {
@@ -407,18 +455,18 @@ header {
     padding: 7rem 0 10rem;
 
     .contact_form {
-        background: rgba(110, 127, 153, 0.1);
-        box-shadow: 0 14px 55px 0 rgba(208, 202, 239, .3);
+        background: var(--td-panel);
+        box-shadow: 0 14px 55px 0 var(--td-panel-shadow);
         padding: 5rem 2.4rem 6rem;
         border-radius: 1.6rem;
         text-align: center;
         position: relative;
 
         .sub_text {
-            color: #61969D;
+            color: $color-teal;
             font-size: 1.2rem;
             padding: 1rem 1.5rem;
-            background: rgba(110, 127, 153, 0.1);
+            background: var(--td-panel);
             width: fit-content;
             border-radius: 3rem;
             text-transform: uppercase;
@@ -461,12 +509,12 @@ header {
         }
 
         form {
-            box-shadow: 0 30px 70px 0 rgba(27, 32, 75, .07);
+            box-shadow: 0 30px 70px 0 var(--td-card-shadow);
             width: 60rem;
             padding: 5.5rem;
             margin: 0 auto;
             position: relative;
-            background: #FFF;
+            background: var(--td-surface);
             border-radius: 1rem;
 
 
@@ -476,7 +524,7 @@ header {
 
                 .virtual_select .vscomp-value[data-tooltip=Select],
                 .vscomp-search-input {
-                    color: #999999 !important;
+                    color: var(--td-placeholder) !important;
                     font-weight: 400 !important;
                     font-family: $font-primary;
                     font-size: 1.4rem;
@@ -487,7 +535,7 @@ header {
 
                 .virtual_select .vscomp-toggle-button {
                     border: 0;
-                    border-bottom: 0.1rem solid var(--Gray-300, #B3B9C6);
+                    border-bottom: 0.1rem solid var(--td-input-border);
                     border-radius: 0;
                     padding-left: 0;
 
@@ -501,12 +549,12 @@ header {
             .form_control {
                 width: 100%;
                 height: 5.2rem;
-                background: #FFF;
+                background: var(--td-input-bg);
                 border-radius: 0;
-                border: 0rem solid var(--Gray-300, #B3B9C6);
-                border-bottom: 0.1rem solid var(--Gray-300, #B3B9C6);
+                border: 0rem solid var(--td-input-border);
+                border-bottom: 0.1rem solid var(--td-input-border);
                 padding: 0 0rem;
-                color: #000;
+                color: var(--td-input-text);
                 font-family: $font-primary;
                 font-size: 1.4rem;
                 font-style: normal;
@@ -516,16 +564,16 @@ header {
                 &:focus,
                 &:hover,
                 &:focus-visible {
-                    border: 0rem solid var(--Gray-300, #B3B9C6);
-                    border-bottom: 0.1rem solid var(--Gray-300, #B3B9C6);
+                    border: 0rem solid var(--td-input-border);
+                    border-bottom: 0.1rem solid var(--td-input-border);
                     box-shadow: none;
                     outline: none;
                 }
 
-                color: #000;
+                color: var(--td-input-text);
 
                 &::placeholder {
-                    color: #999999;
+                    color: var(--td-placeholder);
                 }
 
                 &.--search {
@@ -538,7 +586,7 @@ header {
 
             .error_message {
                 display: none;
-                color: #F00;
+                color: var(--td-error);
                 font-family: "Inter", sans-serif;
                 font-size: 1.4rem;
                 font-style: normal;
@@ -558,11 +606,11 @@ header {
             .form_control.is-invalid:hover,
             .form_control.is-invalid:focus,
             .form_control.is-invalid:focus-visible {
-                border-bottom-color: #F00;
+                border-bottom-color: var(--td-error);
             }
 
             .virtual_select.is-invalid .vscomp-toggle-button {
-                border-bottom-color: #F00;
+                border-bottom-color: var(--td-error);
             }
 
             .btn_form {
@@ -585,28 +633,28 @@ header {
                 font-size: 1.4rem;
                 line-height: 1.6;
                 text-align: left;
-                color: #3C4B62;
+                color: $color-body;
 
                 &:empty {
                     display: none;
                 }
 
                 &--error {
-                    color: #F00;
+                    color: var(--td-error);
                 }
 
                 &--success {
-                    color: #1a7f4e;
+                    color: var(--td-success);
                 }
 
                 &--info {
                     padding: 1.2rem 1.6rem;
                     border-radius: 1rem;
-                    background: rgba(110, 127, 153, 0.1);
+                    background: var(--td-panel);
                 }
 
                 a {
-                    color: #032A3E;
+                    color: var(--td-text-strong);
                     font-weight: 600;
                     text-decoration: underline;
                 }
@@ -655,14 +703,14 @@ header {
 }
 
 .item_card {
-    box-shadow: 0 14px 55px 0 rgba(208, 202, 239, .3);
+    box-shadow: 0 14px 55px 0 var(--td-panel-shadow);
     border-radius: 1.6rem;
     padding: 4dvh 5.5rem;
     position: relative;
 
     .heading {
         font-size: 5rem;
-        color: #354B60;
+        color: $color-heading;
         font-weight: 700;
     }
 
@@ -671,7 +719,7 @@ header {
         width: 50%;
         bottom: 2rem;
         left: 5.5rem;
-        color: #3C4B62;
+        color: $color-body;
         font-size: 1.4rem;
     }
 
@@ -688,7 +736,7 @@ header {
             .title {
                 font-size: 5rem;
                 font-weight: 700;
-                color: #c3c4ca;
+                color: var(--td-slider-idle);
             }
 
             &.swiper-slide-active {
@@ -720,7 +768,7 @@ header {
 
     .text {
         font-size: 1.4rem;
-        color: rgba(0, 0, 0, .6);
+        color: var(--td-footer-text);
         width: 60%;
     }
 
@@ -736,7 +784,7 @@ header {
         .--link {
             display: flex;
             gap: 0.4rem;
-            color: #111111;
+            color: var(--td-footer-strong);
 
 
             svg {
@@ -744,14 +792,14 @@ header {
                 height: 2.6rem;
 
                 path {
-                    fill: #111111;
+                    fill: var(--td-footer-strong);
                 }
             }
         }
     }
 
     .footer_bottom {
-        border-top: 0.1rem solid rgba(0, 0, 0, .1);
+        border-top: 0.1rem solid var(--td-footer-line);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -759,14 +807,14 @@ header {
         margin-top: 5rem;
 
         .copyright {
-            color: rgba(0, 0, 0, .5);
+            color: var(--td-footer-muted);
             font-size: 1rem;
             text-transform: uppercase;
             font-weight: 500;
         }
 
         .fb_link {
-            color: rgba(0, 0, 0, .5);
+            color: var(--td-footer-muted);
             font-size: 1rem;
             text-transform: uppercase;
             font-weight: 500;
@@ -785,7 +833,7 @@ header {
     }
 
     .heading {
-        color: rgba(0, 0, 0, .5);
+        color: var(--td-footer-muted);
         font-size: 1rem;
         text-transform: uppercase;
         font-weight: 600;
@@ -798,7 +846,7 @@ header {
 
     .f_link {
         font-size: 1.8rem;
-        color: #111111;
+        color: var(--td-footer-strong);
     }
 
     .list_style {
@@ -1012,6 +1060,57 @@ header {
                 padding: 0 10rem;
             }
         }
+    }
+}
+
+// ---- Dark theme: inline SVG fills and third-party widgets -----------------
+[data-theme="dark"] {
+
+    // Decorative scribble behind the contact form (fill set inline)
+    .contact_section .contact_form .icon_bg path {
+        fill: var(--td-pen);
+        opacity: 0.55;
+    }
+
+    // VirtualSelect (assets/css/plugins/virtual-select.css hardcodes white)
+    .vscomp-toggle-button,
+    .vscomp-dropbox,
+    .vscomp-dropbox-container,
+    .vscomp-options,
+    .vscomp-dropbox-close-button {
+        background-color: var(--td-surface);
+        color: var(--td-heading);
+    }
+
+    .vscomp-toggle-button {
+        background-color: transparent;
+    }
+
+    .vscomp-dropbox-container {
+        border-color: var(--td-line);
+    }
+
+    .vscomp-search-container {
+        border-bottom-color: var(--td-line);
+    }
+
+    .vscomp-search-input {
+        background-color: transparent;
+    }
+
+    .vscomp-option,
+    .vscomp-option-text,
+    .vscomp-no-options,
+    .vscomp-no-search-results {
+        color: var(--td-heading);
+    }
+
+    .vscomp-option.focused {
+        background-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .vscomp-option.selected {
+        background-color: rgba(255, 255, 255, 0.1);
     }
 }
 

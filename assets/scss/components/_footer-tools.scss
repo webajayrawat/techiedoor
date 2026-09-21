@@ -31,7 +31,7 @@
     &__hint {
         margin: 0;
         font-size: 1.4rem;
-        color: rgba(0, 0, 0, 0.55);
+        color: var(--td-footer-hint);
     }
 
     &__actions {
@@ -43,7 +43,7 @@
         position: relative;
         height: 32rem;
         margin: 2.4rem 2rem 0;
-        border: 1px solid rgba(110, 127, 153, 0.14);
+        border: 1px solid var(--td-tools-border);
         border-bottom: 0;
         border-radius: 3.2rem 3.2rem 0 0;
         background: linear-gradient(180deg, rgba(110, 127, 153, 0.04), rgba(110, 127, 153, 0.14));
@@ -61,7 +61,7 @@
         font-size: 16rem;
         line-height: 1;
         white-space: nowrap;
-        color: rgba(53, 75, 96, 0.07);
+        color: var(--td-tools-word);
         pointer-events: none;
     }
 }
@@ -70,21 +70,21 @@
     height: 4rem;
     padding: 0 2rem;
     border-radius: 18rem;
-    border: 1px solid rgba(3, 42, 62, 0.18);
-    background: #fff;
-    color: $color-ink;
+    border: 1px solid var(--td-tools-btn-border);
+    background: var(--td-surface);
+    color: var(--td-text-strong);
     font-size: 1.3rem;
     font-weight: 500;
     cursor: pointer;
 
     &:hover {
-        background: $color-ink;
-        border-color: $color-ink;
-        color: #fff;
+        background: var(--td-btn-solid-bg);
+        border-color: var(--td-btn-solid-bg);
+        color: var(--td-btn-solid-text);
     }
 
     &:focus-visible {
-        outline: 2px solid $color-ink;
+        outline: 2px solid var(--td-focus);
         outline-offset: 0.2rem;
     }
 }
@@ -110,9 +110,9 @@
     height: 9.6rem;
     padding: 2.2rem;
     border-radius: 2.4rem;
-    border: 1px solid rgba(3, 42, 62, 0.08);
-    background: #fff;
-    box-shadow: 0 1.2rem 3rem -1rem rgba(3, 42, 62, 0.25), inset 0 -0.3rem 0 rgba(3, 42, 62, 0.05);
+    border: 1px solid var(--td-chip-border);
+    background: var(--td-surface);
+    box-shadow: 0 1.2rem 3rem -1rem var(--td-chip-shadow), inset 0 -0.3rem 0 rgba(3, 42, 62, 0.05);
     // `transform` is owned by the physics loop and must never be transitioned.
     // The :hover repeat beats the global `button:hover { transition: all }` rule.
     &,
@@ -128,7 +128,7 @@
     }
 
     &:focus-visible {
-        outline: 2px solid $color-ink;
+        outline: 2px solid var(--td-focus);
         outline-offset: 0.3rem;
     }
 
@@ -139,8 +139,8 @@
         translate: -50% 0.4rem;
         padding: 0.5rem 1rem;
         border-radius: 0.8rem;
-        background: $color-ink;
-        color: #fff;
+        background: var(--td-btn-solid-bg);
+        color: var(--td-btn-solid-text);
         font-size: 1.2rem;
         font-weight: 500;
         white-space: nowrap;

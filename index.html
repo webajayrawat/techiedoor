@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow, noarchive">
+    <!-- Applies the saved light/dark theme before first paint (keep above the stylesheets) -->
+    <script src="assets/js/components/theme.js"></script>
     <link href="assets/css/plugins/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/plugins/swiper-bundle.min.css" rel="stylesheet" />
     <link href="assets/css/plugins/virtual-select.css" rel="stylesheet" />
@@ -21,7 +23,8 @@
         <header>
             <div class="px_lg_100 px_20">
                 <div class="d-flex justify-content-between align-items-center">
-                    <img src="assets/images/logo/logo.png" class="logo" alt="Techiedoor" />
+                    <img src="assets/images/logo/logo.png" class="logo theme_light" alt="Techiedoor" />
+                    <img src="assets/images/logo/logo-on-dark.png" class="logo theme_dark" alt="Techiedoor" loading="lazy" />
 
                     <div class="d-flex justify-content-end align-items-center gap_26">
                         <nav>
@@ -32,9 +35,26 @@
                             <a href="#process" class="nav_link">Process</a>
                             <a href="#ourWork" class="nav_link">Our Work</a>
                         </nav>
-                        <a href="#contactUs" class="btn_dark btn btn_sm">
-                            <span>Contact Us</span>
-                        </a>
+                        <div class="header_actions">
+                            <a href="#contactUs" class="btn_dark btn btn_sm">
+                                <span>Contact Us</span>
+                            </a>
+                            <button type="button" class="theme_toggle" data-theme-toggle aria-label="Dark mode"
+                                aria-pressed="false" title="Switch to dark mode">
+                                <svg class="theme_toggle__icon theme_toggle__icon--moon" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                    <path d="M20.5 14.1A8.5 8.5 0 1 1 9.9 3.5a6.6 6.6 0 0 0 10.6 10.6Z" />
+                                </svg>
+                                <svg class="theme_toggle__icon theme_toggle__icon--sun" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                    <circle cx="12" cy="12" r="4" />
+                                    <path
+                                        d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -326,7 +346,9 @@
             <div class="inner px_20">
                 <div class="row">
                     <div class="col-md-7">
-                        <img src="assets/images/logo/logo.png" class="logo" alt="Techiedoor" />
+                        <img src="assets/images/logo/logo.png" class="logo theme_light" alt="Techiedoor" />
+                        <img src="assets/images/logo/logo-on-dark.png" class="logo theme_dark" alt="Techiedoor"
+                            loading="lazy" />
                         <p class="text mt_lg_20">Smart websites, powerful apps, engaging videos
                             everything your business needs to succeed online.</p>
 

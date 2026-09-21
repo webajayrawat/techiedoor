@@ -27,12 +27,21 @@ $font-secondary: "Roboto", sans-serif;
 
 // Brand tokens (shared by the section components)
 $color-ink: #032A3E;
-$color-heading: #354B60;
-$color-body: #3C4B62;
-$color-teal: #61969D;
 $color-mint: #67FFAB;
 $color-mint-soft: #84F0B2;
-$color-line: rgba(53, 75, 96, 0.14);
+
+// Raw light-theme values, used to seed the CSS custom properties in _theme.scss
+$color-heading-light: #354B60;
+$color-body-light: #3C4B62;
+$color-teal-light: #61969D;
+$color-line-light: rgba(53, 75, 96, 0.14);
+
+// Theme-aware text/line colours (switch with html[data-theme]).
+// These compile to var(), so don't pass them to Sass colour functions.
+$color-heading: var(--td-heading);
+$color-body: var(--td-body);
+$color-teal: var(--td-teal);
+$color-line: var(--td-line);
 $font-script: "Borel", cursive;
 $ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
