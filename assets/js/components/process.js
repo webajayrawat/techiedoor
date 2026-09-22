@@ -1,288 +1,371 @@
 /* =========================================================================
-   Our Process — "journey board"
-   Built from the site's own visual language: the hero's pen draws a
-   hand-sketched route (like the contact section scribble) across a tinted
-   board, connecting six white stage cards.
+   Our Process — "build canvas"
 
-   - Scroll: the pen draws the route (scrubbed) and each stage lights up as
-     the pen reaches its pin.
-   - Hover / focus previews a stage; click / tap jumps the pen to that stage.
-   - The route is generated from the pins' real positions, so it adapts to
-     the 3-column, 2-column and 1-column layouts.
-   - prefers-reduced-motion: the route is shown fully drawn, no pen travel.
+   The six stages are told on one browser canvas where a website takes
+   shape: brief → sitemap & plan → wireframe → code → test report → live.
+   Big editorial type carries the stage, and a rail (drawn by the hero's
+   pen) names all six at a glance: Discover · Research · Design · Build ·
+   Test · Launch.
+
+   Desktop (≥992px wide, ≥620px tall, motion allowed):
+     The stage pins; scrolling moves 01 → 06, snapping to each stage. Rail
+     buttons jump to a stage.
+   Tablet / mobile / reduced motion / no GSAP:
+     A vertical thread of stages, each with its own canvas scene. The thread
+     fills as you scroll and each scene plays once when it comes into view.
+     Reduced motion shows every scene in its finished state.
+
+   Markup hooks: index.html (#process). Styles: scss/components/_process.scss
    ========================================================================= */
 (function () {
 	'use strict';
 
-	const { escape, pad, debounce, prefersReducedMotion, hasFinePointer } = window.TD;
+	const { escape, pad, clamp, prefersReducedMotion } = window.TD;
 
-	const icons = {
-		discovery: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/>',
-		research: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/><path d="M7.5 12l2-2.5 1.8 1.5 2.2-3"/>',
-		design: '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M9 9v11"/>',
-		development: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5.5l-3 13"/>',
-		testing: '<path d="M12 3l7 3v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V6l7-3z"/><path d="M9 12l2.2 2.2L15.5 10"/>',
-		launch: '<path d="M14 4.5c2.5-1.2 5.5-1 5.5-1s.2 3-1 5.5c-1.2 2.6-4 5.6-7 7.2l-3.7-3.7c1.6-3 4.6-5.8 6.2-8z"/><circle cx="15" cy="9" r="1.3"/><path d="M8.5 12.2L5 12l2.5-3.2 3.5-.3M11.8 15.5L12 19l3.2-2.5.3-3.5M6.5 17.5L4 20"/>'
+	// The hero's pen (index.html .pen_icon)
+	const PEN_PATH = 'M36.204 1.044C32.02 2.814 5.66 31.155 4.514 35.116c-.632 2.182-1.75 5.516-2.483 7.409-3.024 7.805-1.54 9.29 6.265 6.265 1.893-.733 5.227-1.848 7.41-2.477 3.834-1.105 4.473-1.647 19.175-16.27 0 0 10.63-10.546 15.21-15.125C53 8.997 42.021-1.418 36.203 1.044Zm7.263 5.369c3.56 3.28 4.114 4.749 2.643 6.995l-1.115 1.7-4.586-4.543-4.585-4.544 1.42-1.157C39.311 3.18 40.2 3.4 43.467 6.413ZM37.863 13.3l4.266 4.304-11.547 11.561-11.547 11.561-4.48-4.446-4.481-4.447 11.404-11.418c6.273-6.28 11.566-11.42 11.762-11.42.197 0 2.277 1.938 4.623 4.305ZM12.016 39.03l3.54 3.584-3.562 1.098-5.316 1.641c-1.665.516-1.727.455-1.211-1.21l1.614-5.226c1.289-4.177.685-4.191 4.935.113Z';
+
+	/* ---- Canvas scenes ----------------------------------------------------
+	   Decorative (the canvas is aria-hidden); the stage text carries the
+	   content. `url` and `status` fill the browser bar for each stage. */
+
+	// One page layout that matures from wireframe → build → final
+	function page(variant) {
+		const card = '<span class="pv_card"><i></i><b></b><b></b></span>';
+		// The wireframe is a clickable prototype: a cursor taps its button
+		const tap = variant === 'wire'
+			? '<span class="pv_click"></span><svg class="pv_cursor" viewBox="0 0 24 24"><path d="M5 3l14 7.5-6.2 1.6L9.6 18z"/></svg>'
+			: '';
+		return `
+			<div class="pv_page pv_page--${variant}">
+				<div class="pv_nav"><span class="pv_logo"></span><span class="pv_menu"><i></i><i></i><i></i></span><span class="pv_cta"></span></div>
+				<div class="pv_hero">
+					<div class="pv_hero__copy"><i class="pv_line"></i><i class="pv_line pv_line--short"></i><i class="pv_line pv_line--thin"></i><span class="pv_btn">${tap}</span></div>
+					<div class="pv_hero__media"></div>
+				</div>
+				<div class="pv_cards">${card}${card}${card}</div>
+			</div>`;
+	}
+
+	function score(value, label) {
+		return `
+			<span class="pv_score" style="--score:${value}">
+				<svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="15.915"/><circle class="pv_score__bar" cx="18" cy="18" r="15.915" stroke-dasharray="${value} 100"/></svg>
+				<b></b><small>${label}</small>
+			</span>`;
+	}
+
+	const code = [
+		'<span class="t">&lt;section</span> <span class="a">class</span>=<span class="s">"hero"</span><span class="t">&gt;</span>',
+		'  <span class="t">&lt;h1&gt;</span>We build digital<span class="t">&lt;/h1&gt;</span>',
+		'  <span class="t">&lt;Button</span> <span class="a">glow</span> <span class="t">/&gt;</span>',
+		'<span class="t">&lt;/section&gt;</span>',
+		'<span class="t">&lt;Cards</span> <span class="a">items</span>=<span class="s">{services}</span> <span class="t">/&gt;</span>',
+		'<span class="c">// responsive · fast · accessible</span>',
+		'<span class="p">$</span> npm run build <span class="ok">✓</span>'
+	];
+
+	const scenes = {
+		discovery: {
+			url: 'project-brief.doc',
+			status: 'Draft',
+			tone: 'lilac',
+			html: () => `
+				<div class="pv pv--brief">
+					<p class="pv_script">Your goals<svg class="pv_scribble" viewBox="0 0 120 10" preserveAspectRatio="none"><path pathLength="1" d="M2 7C34 2.5 76 1.5 118 5"/></svg></p>
+					<div class="pv_notes">
+						<span class="pv_note pv_note--mint">Grow online sales</span>
+						<span class="pv_note pv_note--lilac">Reach a new audience</span>
+						<span class="pv_note pv_note--sky">Look premium</span>
+					</div>
+					<div class="pv_chat"><span class="pv_avatar"></span><span class="pv_bubble">“We want a site that feels like us.”</span></div>
+				</div>`
+		},
+		research: {
+			url: 'sitemap-and-plan',
+			status: 'Planning',
+			tone: 'teal',
+			html: () => `
+				<div class="pv pv--plan">
+					<div class="pv_tree">
+						<span class="pv_node pv_node--root">Home</span>
+						<svg class="pv_links" viewBox="0 0 100 24" preserveAspectRatio="none"><path d="M50 0V12M12.5 12H87.5M12.5 12V24M37.5 12V24M62.5 12V24M87.5 12V24"/></svg>
+						<div class="pv_children"><span class="pv_node">About</span><span class="pv_node">Services</span><span class="pv_node">Work</span><span class="pv_node">Contact</span></div>
+					</div>
+					<div class="pv_gantt">
+						<div class="pv_gantt__rows">
+							<span class="pv_bar pv_bar--teal" style="--from:0;--to:2">Research</span>
+							<span class="pv_bar pv_bar--lilac" style="--from:1.5;--to:4">Design</span>
+							<span class="pv_bar pv_bar--mint" style="--from:3.5;--to:7">Build</span>
+							<span class="pv_bar pv_bar--ink" style="--from:6.5;--to:8">Launch</span>
+						</div>
+						<div class="pv_gantt__weeks">${[1, 2, 3, 4, 5, 6, 7, 8].map((w) => `<span>W${w}</span>`).join('')}</div>
+					</div>
+				</div>`
+		},
+		design: {
+			url: 'figma.com/proto',
+			status: 'Prototype',
+			tone: 'lilac',
+			html: () => `
+				<div class="pv pv--design">
+					${page('wire')}
+				</div>`
+		},
+		development: {
+			url: 'localhost:3000',
+			status: 'In build',
+			tone: 'amber',
+			html: () => `
+				<div class="pv pv--code">
+					<div class="pv_editor">${code.map((line, i) => `<span class="pv_code" style="--l:${i}">${line}</span>`).join('')}</div>
+					${page('build')}
+				</div>`
+		},
+		testing: {
+			url: 'staging.yoursite.com',
+			status: 'Testing',
+			tone: 'teal',
+			html: () => `
+				<div class="pv pv--test">
+					${page('final')}
+					<div class="pv_report">
+						<div class="pv_scores">${score(98, 'Performance')}${score(100, 'Accessibility')}${score(100, 'SEO')}</div>
+						<div class="pv_devices"><span>Desktop</span><span>Tablet</span><span>Mobile</span></div>
+					</div>
+				</div>`
+		},
+		launch: {
+			url: 'yoursite.com',
+			secure: true,
+			status: 'Live',
+			tone: 'mint',
+			html: () => `
+				<div class="pv pv--launch">
+					${page('final')}
+					<span class="pv_toast"><i></i>Your site is live</span>
+					<span class="pv_support"><span class="pv_avatar"></span>Need a tweak? We’re here.</span>
+				</div>`
+		}
 	};
 
-	function cardTemplate(step, i) {
-		const n = pad(i + 1);
-		const outputs = step.outputs.map((o) => `<li>${escape(o)}</li>`).join('');
+	const LOCK = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>';
+
+	/* `only` renders a single scene (stacked layout); omit it for the shared
+	   desktop canvas, which holds every scene. The visible scene, address and
+	   status carry .is-on (re-adding it replays the scene's animation). */
+	function canvasTemplate(steps, only) {
+		const indexes = only == null ? steps.map((_, i) => i) : [only];
+		const on = only == null ? '' : ' is-on';
+		const sceneOf = (i) => scenes[steps[i].visual] || scenes.discovery;
+		const urls = indexes.map((i) => {
+			const s = sceneOf(i);
+			return `<span class="process_canvas__url${on}" data-for="${i}">${s.secure ? LOCK : ''}${escape(s.url)}</span>`;
+		}).join('');
+		const states = indexes.map((i) => {
+			const s = sceneOf(i);
+			return `<span class="process_canvas__status process_canvas__status--${s.tone}${on}" data-for="${i}">${escape(s.status)}</span>`;
+		}).join('');
+		const layers = indexes.map((i) => `<div class="process_canvas__layer${on}" data-layer="${i}">${sceneOf(i).html()}</div>`).join('');
+
 		return `
-			<li class="journey_card" data-index="${i}">
-				<span class="journey_card__pin" aria-hidden="true">${n}</span>
-				<span class="journey_card__mark" aria-hidden="true">${n}</span>
-				<span class="journey_card__icon" aria-hidden="true">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${icons[step.icon] || icons.discovery}</svg>
-				</span>
-				<h3 class="journey_card__title">
-					<button type="button" class="journey_card__toggle" data-goto="${i}" aria-describedby="journeyDesc${i}">
-						<span class="visually-hidden">Stage ${i + 1}: </span>${escape(step.title)}
-					</button>
-				</h3>
-				<p class="journey_card__desc" id="journeyDesc${i}">${escape(step.description)}</p>
-				<ul class="journey_card__outputs" aria-label="What you get">${outputs}</ul>
+			<div class="process_canvas">
+				<div class="process_canvas__window">
+					<div class="process_canvas__bar">
+						<span class="process_canvas__dots"><i></i><i></i><i></i></span>
+						<span class="process_canvas__address">${urls}</span>
+						<span class="process_canvas__state">${states}</span>
+					</div>
+					<div class="process_canvas__view">${layers}</div>
+				</div>
+			</div>`;
+	}
+
+	function stepTemplate(step, i, steps) {
+		const outputs = (step.outputs || []).map((o) => `<li>${escape(o)}</li>`).join('');
+		return `
+			<li class="process_step" data-index="${i}">
+				<div class="process_step__head">
+					<span class="process_step__num" aria-hidden="true">${pad(i + 1)}</span>
+					<span class="process_step__verb">${escape(step.verb || '')}</span>
+				</div>
+				<h3 class="process_step__title"><span class="visually-hidden">Stage ${i + 1} of ${steps.length}: </span>${escape(step.title)}</h3>
+				<p class="process_step__desc">${escape(step.description)}</p>
+				<ul class="process_step__outputs" aria-label="What you get">${outputs}</ul>
+				<div class="process_step__visual" aria-hidden="true">${canvasTemplate(steps, i)}</div>
 			</li>`;
 	}
 
-	/* Smooth curve through points (Catmull-Rom converted to cubic Béziers). */
-	function curveThrough(points) {
-		if (points.length < 2) return '';
-		let d = `M${points[0].x.toFixed(1)},${points[0].y.toFixed(1)}`;
-		for (let i = 0; i < points.length - 1; i++) {
-			const p0 = points[i - 1] || points[i];
-			const p1 = points[i];
-			const p2 = points[i + 1];
-			const p3 = points[i + 2] || p2;
-			const c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + (p2.y - p0.y) / 6 };
-			const c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - (p3.y - p1.y) / 6 };
-			d += ` C${c1.x.toFixed(1)},${c1.y.toFixed(1)} ${c2.x.toFixed(1)},${c2.y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
-		}
-		return d;
+	function railTemplate(steps) {
+		const stops = steps.map((step, i) => `
+			<li>
+				<button type="button" class="process_rail__stop" data-goto="${i}">
+					<span class="process_rail__dot" aria-hidden="true"></span>
+					<span class="process_rail__num">${pad(i + 1)}</span>
+					<span class="process_rail__verb">${escape(step.verb || step.title)}</span><span class="visually-hidden">: ${escape(step.title)}</span>
+				</button>
+			</li>`).join('');
+		return `
+			<div class="process_rail__body" style="--steps:${steps.length}">
+				<div class="process_rail__track" aria-hidden="true">
+					<span class="process_rail__fill"></span>
+					<span class="process_rail__tip"><svg class="process_rail__pen" viewBox="0 0 51 51"><path d="${PEN_PATH}"/></svg></span>
+				</div>
+				<ol class="process_rail__list">${stops}</ol>
+			</div>`;
 	}
 
 	window.TD.initProcess = function initProcess(root, steps) {
 		if (!root || !steps || !steps.length) return;
 
-		const board = root.querySelector('[data-process-board]');
+		const n = steps.length;
+		const stageEl = root.querySelector('[data-process-stage]');
 		const list = root.querySelector('[data-process-list]');
-		const svg = root.querySelector('[data-process-route]');
-		const pen = root.querySelector('[data-process-pen]');
+		const slot = root.querySelector('[data-process-canvas]');
+		const rail = root.querySelector('[data-process-rail]');
+		const reel = root.querySelector('[data-process-reel]');
+		const thread = root.querySelector('[data-process-thread]');
 		const count = root.querySelector('[data-process-count]');
+		const total = root.querySelector('[data-process-total]');
 
-		list.innerHTML = steps.map(cardTemplate).join('');
-		if (count) count.textContent = pad(steps.length);
+		list.innerHTML = steps.map((step, i) => stepTemplate(step, i, steps)).join('');
+		slot.innerHTML = canvasTemplate(steps);
+		rail.innerHTML = railTemplate(steps);
+		// The counter is an outlined "0" plus a rolling digit (fine up to 9 stages)
+		reel.innerHTML = steps.map((_, i) => `<span>${(i + 1) % 10}</span>`).join('');
+		if (count) count.textContent = pad(n);
+		if (total) total.textContent = '/' + pad(n);
 
-		const cards = Array.from(list.querySelectorAll('.journey_card'));
-		const plan = svg.querySelector('.journey_route__plan');
-		const ink = svg.querySelector('.journey_route__ink');
-		const gradient = svg.querySelector('linearGradient');
+		const items = Array.from(list.querySelectorAll('.process_step'));
+		const stops = Array.from(rail.querySelectorAll('.process_rail__stop'));
+		const sharedCanvas = slot.querySelector('.process_canvas');
+		const stepCanvases = items.map((item) => item.querySelector('.process_canvas'));
+		const sharedParts = Array.from(sharedCanvas.querySelectorAll('[data-layer], [data-for]'));
 
-		const route = { total: 0, nodes: [] };
-		const state = { progress: prefersReducedMotion() ? 1 : 0 };
-		let reachedIndex = -1;
-		let hoverIndex = null;
-		let pinnedIndex = null;
-		let progressTrigger = null;
+		/* ---- State ------------------------------------------------------- */
+		let current = -1;
 
-		/* ---- Active / reached states -------------------------------------- */
-		function paint() {
-			// With reduced motion the whole route is drawn, so nothing is highlighted by default.
-			const auto = prefersReducedMotion() ? -1 : Math.max(reachedIndex, 0);
-			const active = hoverIndex ?? pinnedIndex ?? auto;
-			cards.forEach((card, i) => {
-				card.classList.toggle('is-reached', i <= reachedIndex);
-				card.classList.toggle('is-active', i === active);
-				const toggle = card.querySelector('.journey_card__toggle');
-				if (i === active) toggle.setAttribute('aria-current', 'step');
-				else toggle.removeAttribute('aria-current');
+		function setStage(index) {
+			if (index === current) return;
+			current = index;
+			items.forEach((item, i) => {
+				item.classList.toggle('is-active', i === index);
+				item.classList.toggle('is-past', i < index);
 			});
+			stops.forEach((stop, i) => {
+				stop.classList.toggle('is-active', i === index);
+				if (i === index) stop.setAttribute('aria-current', 'step');
+				else stop.removeAttribute('aria-current');
+			});
+			sharedParts.forEach((part) => {
+				part.classList.toggle('is-on', Number(part.dataset.layer ?? part.dataset.for) === index);
+			});
+			root.style.setProperty('--stage', index);
 		}
 
-		/* ---- Route geometry ------------------------------------------------ */
-		function pinCenter(card) {
-			const pin = card.querySelector('.journey_card__pin');
-			// offset* ignores transforms, so reveal animations don't skew the route
-			return {
-				x: card.offsetLeft + pin.offsetLeft + pin.offsetWidth / 2,
-				y: card.offsetTop + pin.offsetTop + pin.offsetHeight / 2
-			};
+		// A stop turns mint once the pen has actually passed it
+		function setRailFill(value) {
+			const fill = clamp(value, 0, 1);
+			rail.style.setProperty('--fill', fill.toFixed(4));
+			stops.forEach((stop, i) => stop.classList.toggle('is-reached', fill * (n - 1) >= i - 0.001));
 		}
-
-		function buildRoute() {
-			const w = board.clientWidth;
-			const h = board.clientHeight;
-			svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
-			svg.setAttribute('width', w);
-			svg.setAttribute('height', h);
-			gradient.setAttribute('x2', w);
-
-			const pins = cards.map(pinCenter);
-			const centers = cards.map((c) => ({ x: c.offsetLeft + c.offsetWidth / 2, y: c.offsetTop + c.offsetHeight / 2 }));
-
-			// Between pins, bow the line away from the two cards it connects so it
-			// reads as a hand-drawn route through the gaps.
-			const points = [];
-			pins.forEach((p, i) => {
-				points.push(p);
-				const next = pins[i + 1];
-				if (!next) return;
-				const mid = { x: (p.x + next.x) / 2, y: (p.y + next.y) / 2 };
-				const len = Math.hypot(next.x - p.x, next.y - p.y) || 1;
-				let nx = -(next.y - p.y) / len;
-				let ny = (next.x - p.x) / len;
-				const away = { x: (centers[i].x + centers[i + 1].x) / 2, y: (centers[i].y + centers[i + 1].y) / 2 };
-				if ((mid.x + nx - away.x) ** 2 + (mid.y + ny - away.y) ** 2 < (mid.x - nx - away.x) ** 2 + (mid.y - ny - away.y) ** 2) {
-					nx = -nx;
-					ny = -ny;
-				}
-				const bow = Math.min(34, len * 0.12) * (i % 2 ? 0.7 : 1);
-				// Keep the bow inside the board (matters for the narrow mobile gutter).
-				points.push({ x: Math.min(Math.max(mid.x + nx * bow, 8), w - 8), y: mid.y + ny * bow });
-			});
-
-			const d = curveThrough(points);
-			plan.setAttribute('d', d);
-			ink.setAttribute('d', d);
-
-			route.total = ink.getTotalLength();
-			ink.style.strokeDasharray = `${route.total} ${route.total}`;
-
-			// Length along the route at which the pen reaches each pin.
-			const sampleStep = 4;
-			let from = 0;
-			route.nodes = pins.map((p) => {
-				let best = from;
-				let bestDist = Infinity;
-				for (let l = from; l <= route.total; l += sampleStep) {
-					const q = ink.getPointAtLength(l);
-					const dist = (q.x - p.x) ** 2 + (q.y - p.y) ** 2;
-					if (dist < bestDist) {
-						bestDist = dist;
-						best = l;
-					} else if (dist > bestDist + 40000) {
-						break; // moving away from this pin; the next pins are further along
-					}
-				}
-				from = best;
-				return best;
-			});
-
-			render();
-		}
-
-		/* ---- Drawing -------------------------------------------------------- */
-		function render() {
-			if (!route.total) return;
-			const drawn = route.total * state.progress;
-			ink.style.strokeDashoffset = String(route.total - drawn);
-
-			const tip = ink.getPointAtLength(drawn);
-			pen.style.transform = `translate3d(${tip.x.toFixed(1)}px, ${tip.y.toFixed(1)}px, 0)`;
-			pen.classList.toggle('is-idle', state.progress <= 0.001);
-
-			let reached = -1;
-			route.nodes.forEach((len, i) => { if (drawn >= len - 2) reached = i; });
-			if (reached !== reachedIndex) {
-				reachedIndex = reached;
-				pinnedIndex = null; // scrolling hands control back to the pen
-				paint();
-			}
-		}
-
-		/* ---- Interaction ------------------------------------------------------ */
-		cards.forEach((card, i) => {
-			card.addEventListener('pointerenter', (e) => {
-				if (e.pointerType !== 'mouse' || !hasFinePointer()) return;
-				hoverIndex = i;
-				paint();
-			});
-			card.addEventListener('pointerleave', () => {
-				if (hoverIndex === null) return;
-				hoverIndex = null;
-				paint();
-			});
-			card.addEventListener('focusin', () => { hoverIndex = i; paint(); });
-			card.addEventListener('focusout', () => { hoverIndex = null; paint(); });
-		});
-
-		list.addEventListener('click', (e) => {
-			const toggle = e.target.closest('[data-goto]');
-			if (!toggle) return;
-			const i = Number(toggle.dataset.goto);
-			pinnedIndex = i;
-			paint();
-
-			// Scroll so the pen arrives at this stage's pin.
-			if (progressTrigger && route.total && !prefersReducedMotion()) {
-				const st = progressTrigger;
-				const target = st.start + (route.nodes[i] / route.total) * (st.end - st.start) + 2;
-				window.scrollTo({ top: target, behavior: 'smooth' });
-			}
-		});
-
-		/* ---- Setup ---------------------------------------------------------- */
-		paint();
-		buildRoute();
-
-		if ('ResizeObserver' in window) {
-			new ResizeObserver(debounce(buildRoute, 120)).observe(board);
-		}
-		if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildRoute);
+		const markAllReached = () => items.forEach((item) => item.classList.add('is-reached'));
 
 		if (!window.gsap || !window.ScrollTrigger) {
-			state.progress = 1;
-			render();
+			markAllReached();
 			return;
 		}
 
+		// Scroll position of each stage's centre within the pin (snap targets)
+		const centres = steps.map((_, i) => (i + 0.5) / n);
+		let pinTrigger = null;
+
+		rail.addEventListener('click', (e) => {
+			const stop = e.target.closest('[data-goto]');
+			if (!stop || !pinTrigger) return;
+			const st = pinTrigger;
+			window.scrollTo({ top: st.start + centres[Number(stop.dataset.goto)] * (st.end - st.start), behavior: 'smooth' });
+		});
+
 		const mm = gsap.matchMedia();
 
-		mm.add('(prefers-reduced-motion: no-preference)', () => {
-			state.progress = 0;
-			const tween = gsap.to(state, {
-				progress: 1,
-				ease: 'none',
-				onUpdate: render,
-				scrollTrigger: {
-					trigger: board,
-					start: 'top 65%',
-					end: 'bottom 70%',
-					scrub: 0.8
+		/* ---- Desktop: pinned stage --------------------------------------- */
+		mm.add('(min-width: 992px) and (min-height: 620px) and (prefers-reduced-motion: no-preference)', () => {
+			root.classList.add('is-pinned');
+			sharedCanvas.classList.add('is-armed', 'is-live');
+			current = -1;
+			setStage(0);
+			setRailFill(0);
+
+			pinTrigger = ScrollTrigger.create({
+				trigger: stageEl,
+				start: 'top top',
+				end: () => '+=' + Math.round(window.innerHeight * 0.65 * n),
+				pin: true,
+				anticipatePin: 1,
+				invalidateOnRefresh: true,
+				snap: {
+					snapTo: [0].concat(centres, 1),
+					duration: { min: 0.2, max: 0.6 },
+					delay: 0.12,
+					ease: 'power2.inOut'
+				},
+				onUpdate: (self) => {
+					const p = self.progress;
+					setStage(Math.min(n - 1, Math.floor(p * n)));
+					// The rail reaches each stop exactly at that stage's snap point
+					setRailFill((p * n - 0.5) / (n - 1));
 				}
-			});
-			progressTrigger = tween.scrollTrigger;
-
-			// Cards rise in like the services rows.
-			gsap.from(cards, {
-				y: 48,
-				opacity: 0,
-				duration: 0.9,
-				ease: 'power3.out',
-				stagger: 0.08,
-				scrollTrigger: { trigger: board, start: 'top 80%', once: true }
-			});
-
-			// Decorative 3D shapes drift like the hero shapes.
-			gsap.utils.toArray(root.querySelectorAll('.journey_shape')).forEach((shape, i) => {
-				gsap.fromTo(shape, { y: 60, rotate: i ? -20 : 0 }, {
-					y: -80,
-					rotate: i ? 25 : 60,
-					ease: 'none',
-					scrollTrigger: { trigger: board, start: 'top bottom', end: 'bottom top', scrub: 1.5 }
-				});
 			});
 
 			return () => {
-				progressTrigger = null;
-				state.progress = 1;
-				render();
+				pinTrigger = null;
+				root.classList.remove('is-pinned');
+				sharedCanvas.classList.remove('is-armed', 'is-live');
+				rail.style.removeProperty('--fill');
+				stops.forEach((stop) => stop.classList.remove('is-reached'));
 			};
 		});
 
-		mm.add('(prefers-reduced-motion: reduce)', () => {
-			state.progress = 1;
-			render();
+		/* ---- Everything else: vertical thread ------------------------------ */
+		mm.add('(max-width: 991px), (max-height: 619px), (prefers-reduced-motion: reduce)', () => {
+			if (prefersReducedMotion()) {
+				markAllReached();
+				thread.style.setProperty('--fill', 1);
+				return () => thread.style.removeProperty('--fill');
+			}
+
+			const triggers = [];
+			stepCanvases.forEach((canvas) => canvas.classList.add('is-armed'));
+
+			triggers.push(ScrollTrigger.create({
+				trigger: list,
+				start: 'top 70%',
+				end: 'bottom 70%',
+				onUpdate: (self) => thread.style.setProperty('--fill', self.progress.toFixed(4))
+			}));
+
+			items.forEach((item, i) => {
+				triggers.push(ScrollTrigger.create({
+					trigger: item,
+					start: 'top 70%',
+					onEnter: () => item.classList.add('is-reached'),
+					onLeaveBack: () => item.classList.remove('is-reached')
+				}));
+				triggers.push(ScrollTrigger.create({
+					trigger: stepCanvases[i],
+					start: 'top 90%',
+					once: true,
+					onEnter: () => stepCanvases[i].classList.add('is-live')
+				}));
+			});
+
+			return () => {
+				triggers.forEach((t) => t.kill());
+				items.forEach((item) => item.classList.remove('is-reached'));
+				stepCanvases.forEach((canvas) => canvas.classList.remove('is-armed', 'is-live'));
+				thread.style.removeProperty('--fill');
+			};
 		});
 	};
 })();

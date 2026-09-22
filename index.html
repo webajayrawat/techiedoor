@@ -150,7 +150,7 @@
                 <div class="project_list" data-projects-list></div>
             </div>
         </section>
-        <section class="journey_section" id="process" data-process>
+        <section class="process_section" id="process" data-process>
             <div class="inner_wide px_20">
                 <div class="section_head">
                     <div class="section_head__main">
@@ -158,30 +158,28 @@
                         <h2 class="section_title" data-reveal>Our <span class="accent_script">Process</span></h2>
                     </div>
                     <div class="section_head__side" data-reveal>
-                        <p class="section_lead">From the first conversation to launch day and beyond. Follow the pen through six
-                            clear stages, with no guesswork along the way.</p>
+                        <p class="section_lead">From a first conversation to a live website. Watch your project take shape
+                            across six clear stages, with no guesswork along the way.</p>
                         <span class="section_count"><b data-process-count>06</b> stages</span>
                     </div>
                 </div>
-                <div class="journey_board" data-process-board>
-                    <img src="assets/images/icons/shape-2.png" class="journey_shape journey_shape--1" alt="" aria-hidden="true" />
-                    <img src="assets/images/icons/shape-1.png" class="journey_shape journey_shape--2" alt="" aria-hidden="true" />
-                    <svg class="journey_route" data-process-route aria-hidden="true" focusable="false">
-                        <defs>
-                            <linearGradient id="journeyInk" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0">
-                                <stop offset="0" stop-color="#516e65" />
-                                <stop offset="1" stop-color="#61969D" />
-                            </linearGradient>
-                        </defs>
-                        <path class="journey_route__plan" d="" />
-                        <path class="journey_route__ink" d="" stroke="url(#journeyInk)" />
-                    </svg>
-                    <ol class="journey_list" data-process-list></ol>
-                    <svg class="journey_pen" data-process-pen aria-hidden="true" focusable="false" viewBox="0 0 51 51">
-                        <path
-                            d="M36.204 1.044C32.02 2.814 5.66 31.155 4.514 35.116c-.632 2.182-1.75 5.516-2.483 7.409-3.024 7.805-1.54 9.29 6.265 6.265 1.893-.733 5.227-1.848 7.41-2.477 3.834-1.105 4.473-1.647 19.175-16.27 0 0 10.63-10.546 15.21-15.125C53 8.997 42.021-1.418 36.203 1.044Zm7.263 5.369c3.56 3.28 4.114 4.749 2.643 6.995l-1.115 1.7-4.586-4.543-4.585-4.544 1.42-1.157C39.311 3.18 40.2 3.4 43.467 6.413ZM37.863 13.3l4.266 4.304-11.547 11.561-11.547 11.561-4.48-4.446-4.481-4.447 11.404-11.418c6.273-6.28 11.566-11.42 11.762-11.42.197 0 2.277 1.938 4.623 4.305ZM12.016 39.03l3.54 3.584-3.562 1.098-5.316 1.641c-1.665.516-1.727.455-1.211-1.21l1.614-5.226c1.289-4.177.685-4.191 4.935.113Z" />
-                    </svg>
+            </div>
+            <!-- Rendered by assets/js/components/process.js. On large screens the
+                 stage pins and scrolling moves through 01 → 06. -->
+            <div class="process_stage" data-process-stage>
+                <div class="process_stage__inner inner_wide px_20">
+                    <div class="process_story">
+                        <div class="process_counter" aria-hidden="true">
+                            <span class="process_counter__zero">0</span><span class="process_counter__roll"><span
+                                    class="process_counter__reel" data-process-reel></span></span><span
+                                class="process_counter__total" data-process-total>/06</span>
+                        </div>
+                        <span class="process_thread" data-process-thread aria-hidden="true"></span>
+                        <ol class="process_steps" data-process-list></ol>
+                    </div>
+                    <div class="process_canvas_slot" data-process-canvas aria-hidden="true"></div>
                 </div>
+                <nav class="process_rail inner_wide px_20" aria-label="Process stages" data-process-rail></nav>
             </div>
         </section>
         <section class="projects_section" id="ourWork">

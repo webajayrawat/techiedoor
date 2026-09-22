@@ -36,7 +36,7 @@
     --td-header-shadow: rgba(0, 0, 0, 0.1);
     --td-nav: #222;
 
-    // Solid "dark" button (Contact Us, project CTA, reached process pin)
+    // Solid "dark" button (Contact Us, project CTA, process sitemap root)
     --td-btn-solid-bg: #{$color-ink};
     --td-btn-solid-bg-hover: #021c29;
     --td-btn-solid-text: #fff;
@@ -67,9 +67,8 @@
     --td-badge-bg: rgba(255, 255, 255, 0.88);
     --td-badge-text: #{$color-heading-light};
 
-    // Process
+    // Decorative line art (contact scribble)
     --td-pen: #516e65;
-    --td-route-plan: rgba(81, 110, 101, 0.3);
 
     // Footer
     --td-footer-text: rgba(0, 0, 0, 0.6);
@@ -135,7 +134,6 @@
     --td-badge-text: #E7EEF3;
 
     --td-pen: #8CC5B4;
-    --td-route-plan: rgba(140, 197, 180, 0.35);
 
     --td-footer-text: rgba(231, 238, 243, 0.65);
     --td-footer-muted: rgba(231, 238, 243, 0.5);

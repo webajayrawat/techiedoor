@@ -164,44 +164,52 @@ window.TD_DATA = {
 
 	/* ---------------------------------------------------------------------
 	   OUR PROCESS
-	   icon : one of discovery | research | design | development | testing | launch
+	   verb   : one-word label shown on the progress rail (read at a glance)
+	   visual : scene drawn on the build canvas, one of
+	            discovery | research | design | development | testing | launch
 	   ------------------------------------------------------------------- */
 	process: [
 		{
 			title: 'Discovery & Strategy',
 			description: 'We start by listening. Together we define your goals, audience and what success looks like, then shape a strategy around it.',
 			outputs: ['Goals & KPIs', 'Project scope', 'Strategy brief'],
-			icon: 'discovery'
+			verb: 'Discover',
+			visual: 'discovery'
 		},
 		{
 			title: 'Research & Planning',
 			description: 'We study your market, competitors and users, then turn insights into a clear plan: sitemap, features and timeline.',
 			outputs: ['User insights', 'Sitemap', 'Roadmap'],
-			icon: 'research'
+			verb: 'Research',
+			visual: 'research'
 		},
 		{
 			title: 'UI/UX Design',
 			description: 'Wireframes become polished, on-brand interfaces. We prototype key flows so you can click through before a line of code is written.',
 			outputs: ['Wireframes', 'Visual design', 'Prototype'],
-			icon: 'design'
+			verb: 'Design',
+			visual: 'design'
 		},
 		{
 			title: 'Development',
 			description: 'We build with clean, scalable code, responsive on every screen and connected to the tools your business already uses.',
 			outputs: ['Frontend', 'Backend & CMS', 'Integrations'],
-			icon: 'development'
+			verb: 'Build',
+			visual: 'development'
 		},
 		{
 			title: 'Testing & Optimization',
 			description: 'Every page is tested across devices and browsers. We tune speed, accessibility and SEO so the launch is smooth.',
 			outputs: ['QA testing', 'Performance', 'Accessibility'],
-			icon: 'testing'
+			verb: 'Test',
+			visual: 'testing'
 		},
 		{
 			title: 'Launch & Support',
 			description: 'We go live together, then stay by your side with updates, improvements and guidance whenever you need it.',
 			outputs: ['Go-live', 'Training', 'Ongoing support'],
-			icon: 'launch'
+			verb: 'Launch',
+			visual: 'launch'
 		}
 	],
 
